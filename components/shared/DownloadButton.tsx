@@ -41,8 +41,27 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
         }
       });
 
+      const fileName = `pokeyou-${card.trainerName.toLowerCase().replace(/\s+/g, '-')}-${card.matchedPokemon.name}.${format.ext}`;
+
+      if (isMobile && navigator.share) {
+        try {
+          const res = await fetch(dataUrl);
+          const blob = await res.blob();
+          const file = new File([blob], fileName, { type: blob.type });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              title: 'My PokéYou Card',
+              files: [file]
+            });
+            return;
+          }
+        } catch (err) {
+          console.warn('Web Share API failed, falling back to normal download', err);
+        }
+      }
+
       const link = document.createElement('a');
-      link.download = `pokeyou-${card.trainerName.toLowerCase().replace(/\s+/g, '-')}-${card.matchedPokemon.name}.${format.ext}`;
+      link.download = fileName;
       link.href = dataUrl;
       link.click();
     } catch (e) {
