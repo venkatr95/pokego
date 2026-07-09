@@ -28,11 +28,17 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
 
     setDownloading(format.id);
     try {
+      const isMobile = window.innerWidth < 768;
       const dataUrl = await format.fn(element, {
         quality: 0.98,
-        pixelRatio: 3, // 3x for high-res
+        pixelRatio: isMobile ? 1.5 : 3, // Prevent mobile safari memory crashes
         cacheBust: true,
-        backgroundColor: '#0a0b0f',
+        backgroundColor: 'transparent',
+        style: {
+          transform: 'none',
+          perspective: 'none',
+          boxShadow: 'none',
+        }
       });
 
       const link = document.createElement('a');

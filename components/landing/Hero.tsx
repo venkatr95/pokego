@@ -1,9 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Sparkles, Zap, ChevronRight } from 'lucide-react';
-import { ParticleBackground } from './ParticleBackground';
+import dynamic from 'next/dynamic';
+
+const ParticleBackground = dynamic(
+  () => import('./ParticleBackground').then((mod) => mod.ParticleBackground),
+  { ssr: false }
+);
 
 const FEATURE_CARDS = [
   { emoji: '✨', title: 'Personality Matching', desc: 'Our algorithm analyzes your answers and matches you to the Pokémon that resonates most with your unique traits.' },
@@ -119,8 +125,7 @@ export function Hero() {
                 style={{ borderColor: p.color + '40', boxShadow: `0 0 20px ${p.color}30` }}
               >
                 <span className="text-xs text-foreground/40 font-mono">#{p.num}</span>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.art} alt={p.name} className="w-16 h-16 object-contain" loading="lazy" />
+                <Image src={p.art} alt={p.name} width={64} height={64} className="w-16 h-16 object-contain" priority />
                 <span className="text-xs font-semibold text-foreground/80">{p.name}</span>
               </div>
             </motion.div>

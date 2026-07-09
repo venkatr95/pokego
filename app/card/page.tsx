@@ -198,6 +198,7 @@ export default function CardRevealPage() {
                     interactive
                     themeId={selectedTheme}
                     environmentId={selectedEnvironment}
+                    scale={windowSize.width > 0 && windowSize.width < 420 ? (windowSize.width - 40) / 380 : 1}
                   />
                 </motion.div>
               </div>

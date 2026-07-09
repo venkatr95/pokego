@@ -188,10 +188,11 @@ export function PokemonSearchStep({ question, onNext, onBack }: PokemonSearchSte
         <AnimatePresence>
           {open && results.length > 0 && (
             <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
-              className="absolute top-full left-0 right-0 mt-2 glass-strong rounded-xl overflow-hidden z-50 max-h-72 overflow-y-auto"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="mt-2 glass-strong rounded-xl overflow-hidden max-h-72 overflow-y-auto"
             >
               {results.map((p) => {
                 return (
