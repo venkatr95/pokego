@@ -211,7 +211,7 @@ export default function CardRevealPage() {
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.5 }}
-                className="flex-1 max-w-md space-y-5"
+                className="flex-1 w-full min-w-0 max-w-md space-y-5"
               >
                 {/* Trainer info */}
                 <div className="glass-card rounded-2xl p-5">

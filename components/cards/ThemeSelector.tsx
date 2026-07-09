@@ -33,7 +33,7 @@ export function ThemeSelector({
 
         <div
           ref={themeScrollRef}
-          className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin"
+          className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin w-full max-w-full"
           style={{ scrollbarWidth: 'thin' }}
         >
           {THEME_ORDER.map((id) => {
@@ -88,7 +88,7 @@ export function ThemeSelector({
 
         <div
           ref={envScrollRef}
-          className="flex gap-2 overflow-x-auto pb-2"
+          className="flex gap-2 overflow-x-auto pb-2 w-full max-w-full"
           style={{ scrollbarWidth: 'thin' }}
         >
           {/* Auto option */}
