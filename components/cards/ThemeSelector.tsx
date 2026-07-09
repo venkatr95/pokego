@@ -30,9 +30,7 @@ export function ThemeSelector({
     <div className="w-full space-y-4">
       {/* Card Style */}
       <div>
-        <p className="text-xs text-foreground/40 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-          <span>🎨</span> Card Style
-        </p>
+
         <div
           ref={themeScrollRef}
           className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin"
@@ -87,9 +85,7 @@ export function ThemeSelector({
 
       {/* Environment / Background */}
       <div>
-        <p className="text-xs text-foreground/40 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-          <span>🌍</span> Background Environment
-        </p>
+
         <div
           ref={envScrollRef}
           className="flex gap-2 overflow-x-auto pb-2"

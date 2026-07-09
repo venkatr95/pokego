@@ -246,10 +246,10 @@ export default function CardRevealPage() {
                   <button
                     id="toggle-theme-panel"
                     onClick={() => setShowThemePanel(!showThemePanel)}
-                    className="w-full flex items-center justify-between text-xs text-foreground/40 uppercase tracking-wider mb-0"
+                    className="w-full flex items-center justify-between text-xs text-foreground/40 uppercase tracking-wider mb-0 group"
                   >
-                    <span className="flex items-center gap-1.5"><Palette className="w-3 h-3" /> Card Style</span>
-                    <ChevronDown className={`w-4 h-4 transition-transform ${showThemePanel ? 'rotate-180' : ''}`} />
+                    <span className="flex items-center justify-center gap-1.5 w-full"><Palette className="w-3 h-3" /> Card Style</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform absolute right-5 ${showThemePanel ? 'rotate-180' : ''}`} />
                   </button>
                   <AnimatePresence>
                     {showThemePanel && (

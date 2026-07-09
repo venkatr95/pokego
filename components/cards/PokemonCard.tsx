@@ -215,7 +215,7 @@ export function PokemonCard({
             border: `${theme.borderWidth} solid ${borderColor}60`,
           }}
         >
-          <img src="/img/pokeback.png" alt="Card Back" className="w-full h-full object-cover" />
+          <img src="/img/pokeback.png" alt="Card Back" className="w-full h-full object-cover" style={{ transform: 'scaleX(-1)' }} />
         </div>
 
         {/* Card Front (Front Face) */}
