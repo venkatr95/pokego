@@ -44,7 +44,7 @@ export function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center gap-2 md:gap-3">
-          <ThemeToggle />
+          {/* <ThemeToggle /> disabled as requested */}
           {/* <LoginButton /> disabled as requested */}
           <Link
             href="/quiz"
