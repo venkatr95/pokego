@@ -21,6 +21,9 @@ const FORMATS = [
 export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
   const [open, setOpen] = useState(false);
   const [downloading, setDownloading] = useState<string | null>(null);
+  const [resultImage, setResultImage] = useState<string | null>(null);
+  
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
 
   const download = async (format: typeof FORMATS[number]) => {
     const element = document.getElementById(cardElementId);
@@ -28,7 +31,6 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
 
     setDownloading(format.id);
     try {
-      const isMobile = window.innerWidth < 768;
       const dataUrl = await format.fn(element, {
         quality: 0.98,
         pixelRatio: isMobile ? 1.5 : 3, // Prevent mobile safari memory crashes
@@ -43,32 +45,19 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
 
       const fileName = `pokeyou-${card.trainerName.toLowerCase().replace(/\s+/g, '-')}-${card.matchedPokemon.name}.${format.ext}`;
 
-      if (isMobile && navigator.share) {
-        try {
-          const res = await fetch(dataUrl);
-          const blob = await res.blob();
-          const file = new File([blob], fileName, { type: blob.type });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-              title: 'My PokéYou Card',
-              files: [file]
-            });
-            return;
-          }
-        } catch (err) {
-          console.warn('Web Share API failed, falling back to normal download', err);
-        }
+      if (isMobile) {
+        setResultImage(dataUrl);
+      } else {
+        const link = document.createElement('a');
+        link.download = fileName;
+        link.href = dataUrl;
+        link.click();
       }
-
-      const link = document.createElement('a');
-      link.download = fileName;
-      link.href = dataUrl;
-      link.click();
     } catch (e) {
       console.error('Download failed:', e);
     } finally {
       setDownloading(null);
-      setOpen(false);
+      if (!isMobile) setOpen(false);
     }
   };
 
@@ -111,6 +100,43 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
                 </button>
               );
             })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {resultImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/90 p-6 backdrop-blur-sm"
+            onClick={() => setResultImage(null)}
+          >
+            <div className="relative flex flex-col items-center w-full max-w-sm gap-6" onClick={e => e.stopPropagation()}>
+              <div className="text-center space-y-2">
+                <h3 className="text-xl font-bold text-white">Your Card is Ready!</h3>
+                <p className="text-white/80 text-sm bg-white/10 px-4 py-2 rounded-full border border-white/20">
+                  👆 Long-press the image to save
+                </p>
+              </div>
+              
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img 
+                src={resultImage} 
+                alt="Your Custom Card" 
+                className="w-full h-auto max-h-[60vh] object-contain rounded-2xl shadow-2xl shadow-brand-500/20" 
+              />
+              
+              <button 
+                className="btn-primary w-full py-3" 
+                onClick={() => {
+                  setResultImage(null);
+                  setOpen(false);
+                }}
+              >
+                Close
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
