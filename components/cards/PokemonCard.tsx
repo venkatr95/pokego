@@ -207,6 +207,7 @@ export function PokemonCard({
           className="absolute inset-0"
           style={{
             backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
             borderRadius: theme.borderRadius,
             overflow: 'hidden',
@@ -220,7 +221,7 @@ export function PokemonCard({
         {/* Card Front (Front Face) */}
         <div
           className="absolute inset-0"
-          style={{ backfaceVisibility: 'hidden' }}
+          style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
         >
           {/* ── Card face ─────────────────────────────────────────── */}
           {isFullArt ? (

@@ -10,7 +10,6 @@ import { PokemonCard } from '@/components/cards/PokemonCard';
 import { RarityBadge } from '@/components/cards/RarityBadge';
 import { ThemeSelector } from '@/components/cards/ThemeSelector';
 import { PersonalityRadar } from '@/components/cards/PersonalityRadar';
-import { DownloadButton } from '@/components/shared/DownloadButton';
 import { ShareButtons } from '@/components/shared/ShareButtons';
 import { TYPE_COLORS } from '@/types/pokemon';
 import { ARCardPreview } from '@/components/ar/ARCardPreview';
@@ -20,6 +19,10 @@ import {
 } from 'lucide-react';
 
 const ReactConfetti = dynamic(() => import('react-confetti'), { ssr: false });
+const DownloadButton = dynamic(
+  () => import('@/components/shared/DownloadButton').then((mod) => mod.DownloadButton),
+  { ssr: false }
+);
 
 type ActiveTab = 'card' | 'personality' | 'story' | 'team';
 
