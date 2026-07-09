@@ -17,7 +17,7 @@ export function Navbar() {
       transition={{ duration: 0.4 }}
       className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10"
     >
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
@@ -27,11 +27,11 @@ export function Navbar() {
           <motion.div
             whileHover={{ rotate: 360 }}
             transition={{ duration: 0.5 }}
-            className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center"
+            className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shrink-0"
           >
             <Zap className="w-4 h-4 text-foreground" />
           </motion.div>
-          <span className="bg-gradient-to-r from-brand-400 to-purple-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-brand-400 to-purple-400 bg-clip-text text-transparent truncate hidden sm:block">
             PokéYou
           </span>
         </Link>
@@ -43,12 +43,12 @@ export function Navbar() {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <ThemeToggle />
-          <LoginButton />
+          {/* <LoginButton /> disabled as requested */}
           <Link
             href="/quiz"
-            className="btn-primary text-sm py-2 px-5"
+            className="btn-primary text-xs py-1.5 px-3 md:text-sm md:py-2 md:px-5"
           >
             Start Quiz
           </Link>
