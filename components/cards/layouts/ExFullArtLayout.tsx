@@ -68,6 +68,7 @@ export function ExFullArtLayout({
       <img
         src={artworkUrl}
         alt={pokemon.displayName}
+        crossOrigin="anonymous"
         className="absolute inset-0 w-full h-full object-cover"
         style={{
           filter: `${theme.artworkFilter} contrast(1.1) saturate(1.2)`,
@@ -108,7 +109,7 @@ export function ExFullArtLayout({
               {/* Circular Portrait */}
               <div className="w-12 h-12 rounded-full bg-gradient-to-b from-gray-100 to-gray-300 border-[2px] border-white shadow-[0_4px_6px_rgba(0,0,0,0.6),inset_0_-4px_4px_rgba(0,0,0,0.2)] z-10 relative flex items-center justify-center overflow-hidden">
                 <div className="w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white to-gray-400 flex items-center justify-center">
-                  {buddyArtUrl ? <img src={buddyArtUrl} className="w-9 h-9 object-contain drop-shadow-md" alt="Pre-evo" /> : <span className="text-xl drop-shadow-md">{energyIcon}</span>}
+                  {buddyArtUrl ? <img src={buddyArtUrl} crossOrigin="anonymous" className="w-9 h-9 object-contain drop-shadow-md" alt="Pre-evo" /> : <span className="text-xl drop-shadow-md">{energyIcon}</span>}
                 </div>
               </div>
               {/* STAGE label banner attached to portrait */}

@@ -23,7 +23,51 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
   const [downloading, setDownloading] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
   
-  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+  const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+  const generateWallpaper = async (cardDataUrl: string, type: 'mobile' | 'desktop'): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new window.Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve(cardDataUrl);
+
+        if (type === 'mobile') {
+          canvas.width = 1080;
+          canvas.height = 1920;
+        } else {
+          canvas.width = 1920;
+          canvas.height = 1080;
+        }
+
+        // Draw radial gradient background
+        const typeTheme = card.matchedPokemon.primaryType;
+        const gradient = ctx.createRadialGradient(canvas.width / 2, canvas.height / 3, 0, canvas.width / 2, canvas.height / 2, canvas.height);
+        gradient.addColorStop(0, '#1a1b26'); // Darker center
+        gradient.addColorStop(1, '#0a0b0f'); // Very dark edges
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Calculate scale to fit card nicely
+        const scale = type === 'mobile' ? (canvas.width * 0.8) / img.width : (canvas.height * 0.7) / img.height;
+        const w = img.width * scale;
+        const h = img.height * scale;
+        const x = (canvas.width - w) / 2;
+        const y = (canvas.height - h) / 2;
+
+        // Draw card shadow
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = 40;
+        ctx.shadowOffsetY = 20;
+
+        ctx.drawImage(img, x, y, w, h);
+        resolve(canvas.toDataURL('image/png', 1.0));
+      };
+      img.src = cardDataUrl;
+    });
+  };
 
   const download = async (format: typeof FORMATS[number]) => {
     const element = document.getElementById(cardElementId);
@@ -31,9 +75,9 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
 
     setDownloading(format.id);
     try {
-      const dataUrl = await format.fn(element, {
+      let dataUrl = await format.fn(element, {
         quality: 0.98,
-        pixelRatio: isMobile ? 1.5 : 3, // Prevent mobile safari memory crashes
+        pixelRatio: isTouchDevice ? 1.5 : 3, // Prevent mobile safari memory crashes
         cacheBust: true,
         backgroundColor: 'transparent',
         style: {
@@ -43,9 +87,15 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
         }
       });
 
-      const fileName = `pokeyou-${card.trainerName.toLowerCase().replace(/\s+/g, '-')}-${card.matchedPokemon.name}.${format.ext}`;
+      if (format.id === 'wallpaper-mobile') {
+        dataUrl = await generateWallpaper(dataUrl, 'mobile');
+      } else if (format.id === 'wallpaper-desktop') {
+        dataUrl = await generateWallpaper(dataUrl, 'desktop');
+      }
 
-      if (isMobile) {
+      const fileName = `pokeyou-${card.trainerName.toLowerCase().replace(/\s+/g, '-')}-${card.matchedPokemon.name}-${format.id}.${format.ext}`;
+
+      if (isTouchDevice) {
         setResultImage(dataUrl);
       } else {
         const link = document.createElement('a');
@@ -55,9 +105,10 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
       }
     } catch (e) {
       console.error('Download failed:', e);
+      alert('Failed to generate image. Please try again. Error: ' + (e instanceof Error ? e.message : String(e)));
     } finally {
       setDownloading(null);
-      if (!isMobile) setOpen(false);
+      if (!isTouchDevice) setOpen(false);
     }
   };
 
