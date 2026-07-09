@@ -422,7 +422,7 @@ export const CARD_THEMES: Record<CardThemeId, CardTheme> = {
 };
 
 export const THEME_ORDER: CardThemeId[] = [
-  'classic-tcg', 'neo-genesis', 'ex', 'gx', 'v', 'vmax', 'vstar',
+  'ex', 'classic-tcg', 'neo-genesis', 'gx', 'v', 'vmax', 'vstar',
   'full-art', 'rainbow-rare', 'gold-secret', 'ancient-future',
   'minimal-modern', 'anime-style', 'pixel-art', 'retro-gameboy',
 ];
