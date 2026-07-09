@@ -102,9 +102,9 @@ export default function CardRevealPage() {
         />
       )}
 
-      {/* Ambient glow */}
+      {/* Ambient glow - Hidden on mobile for performance */}
       <div
-        className="fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-[120px] pointer-events-none opacity-25"
+        className="fixed top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-[120px] pointer-events-none opacity-25 hidden md:block"
         style={{ background: typeTheme.primary }}
       />
 

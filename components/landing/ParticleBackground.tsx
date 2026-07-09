@@ -40,7 +40,10 @@ export function ParticleBackground() {
     window.addEventListener('resize', resize);
 
     // Init particles
-    for (let i = 0; i < 60; i++) {
+    const isMobile = window.innerWidth < 768;
+    const numParticles = isMobile ? 25 : 60;
+    
+    for (let i = 0; i < numParticles; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
