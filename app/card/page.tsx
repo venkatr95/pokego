@@ -355,54 +355,7 @@ export default function CardRevealPage() {
             </motion.div>
           )}
 
-          {/* Modals for AR & Printing */}
-          <AnimatePresence>
-            {showARPreview && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 px-4"
-              >
-                <div className="w-full max-w-lg bg-[#111] p-6 rounded-3xl border border-white/10 relative">
-                  <button onClick={() => setShowARPreview(false)} className="absolute top-4 right-4 text-foreground/50 hover:text-foreground">✕</button>
-                  <h3 className="font-bold text-xl mb-4 text-foreground">AR Card Preview</h3>
-                  <ARCardPreview pokemonName={pokemon.displayName} />
-                  <p className="text-xs text-foreground/40 text-center mt-4">Point your camera at a flat surface and tap &quot;Enter AR&quot;.</p>
-                </div>
-              </motion.div>
-            )}
 
-            {showPrintModal && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 px-4"
-              >
-                <div className="w-full max-w-md bg-[#111] p-6 rounded-3xl border border-white/10 relative text-center">
-                  <button onClick={() => setShowPrintModal(false)} className="absolute top-4 right-4 text-foreground/50 hover:text-foreground">✕</button>
-                  <h3 className="font-display font-bold text-2xl mb-2 text-foreground">Print Physical Card</h3>
-                  <p className="text-foreground/60 mb-6 text-sm">Get a real, holographic printed version of your unique Pokémon personality card delivered to your door.</p>
-                  
-                  <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-xl mb-6 text-left">
-                    <p className="text-yellow-400 font-bold mb-1">Premium Feature</p>
-                    <p className="text-foreground/50 text-xs">This feature connects to Printful/Prodigi API. Mock checkout flow activated.</p>
-                  </div>
-
-                  <button 
-                    onClick={() => {
-                      alert("Connecting to Print-on-Demand Provider checkout...");
-                      setShowPrintModal(false);
-                    }}
-                    className="w-full py-4 bg-foreground text-background font-bold rounded-xl hover:bg-gray-200 transition-colors"
-                  >
-                    Checkout ($9.99)
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           {/* Personality Tab */}
           {revealed && activeTab === 'personality' && (
@@ -636,6 +589,55 @@ export default function CardRevealPage() {
                 <Users className="w-4 h-4" />
                 Full Team Builder with Type Coverage
               </Link>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Modals for AR & Printing */}
+        <AnimatePresence>
+          {showARPreview && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 px-4"
+            >
+              <div className="w-full max-w-lg bg-[#111] p-6 rounded-3xl border border-white/10 relative">
+                <button onClick={() => setShowARPreview(false)} className="absolute top-4 right-4 text-foreground/50 hover:text-foreground">✕</button>
+                <h3 className="font-bold text-xl mb-4 text-foreground">AR Card Preview</h3>
+                <ARCardPreview pokemonName={pokemon.displayName} />
+                <p className="text-xs text-foreground/40 text-center mt-4">Point your camera at a flat surface and tap &quot;Enter AR&quot;.</p>
+              </div>
+            </motion.div>
+          )}
+
+          {showPrintModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 px-4"
+            >
+              <div className="w-full max-w-md bg-[#111] p-6 rounded-3xl border border-white/10 relative text-center">
+                <button onClick={() => setShowPrintModal(false)} className="absolute top-4 right-4 text-foreground/50 hover:text-foreground">✕</button>
+                <h3 className="font-display font-bold text-2xl mb-2 text-foreground">Print Physical Card</h3>
+                <p className="text-foreground/60 mb-6 text-sm">Get a real, holographic printed version of your unique Pokémon personality card delivered to your door.</p>
+                
+                <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-xl mb-6 text-left">
+                  <p className="text-yellow-400 font-bold mb-1">Premium Feature</p>
+                  <p className="text-foreground/50 text-xs">This feature connects to Printful/Prodigi API. Mock checkout flow activated.</p>
+                </div>
+
+                <button 
+                  onClick={() => {
+                    alert("Connecting to Print-on-Demand Provider checkout...");
+                    setShowPrintModal(false);
+                  }}
+                  className="w-full py-4 bg-foreground text-background font-bold rounded-xl hover:bg-gray-200 transition-colors"
+                >
+                  Checkout ($9.99)
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

@@ -215,7 +215,7 @@ export function PokemonCard({
             border: `${theme.borderWidth} solid ${borderColor}60`,
           }}
         >
-          <img src="https://images.pokemontcg.io/cardback.png" crossOrigin="anonymous" alt="Card Back" className="w-full h-full object-cover" />
+          <img src="/img/pokeback.png" alt="Card Back" className="w-full h-full object-cover" />
         </div>
 
         {/* Card Front (Front Face) */}
@@ -387,7 +387,7 @@ export function PokemonCard({
                         style={{ background: `${typeTheme.bg}`, border: `1px solid ${typeTheme.primary}40` }}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={buddyArtUrl} crossOrigin="anonymous" alt={card.buddy.displayName} className="w-10 h-10 object-contain" />
+                        <img src={`/_next/image?url=${encodeURIComponent(buddyArtUrl)}&w=128&q=75`} alt={card.buddy.displayName} className="w-10 h-10 object-contain" />
                       </div>
                       <p className="text-[8px] text-foreground/50 text-center mt-0.5">Buddy</p>
                     </div>
@@ -396,9 +396,8 @@ export function PokemonCard({
                   {/* Main artwork */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={artworkUrl}
+                    src={`/_next/image?url=${encodeURIComponent(artworkUrl)}&w=1080&q=75`}
                     alt={pokemon.displayName}
-                    crossOrigin="anonymous"
                     className="absolute inset-0 w-full h-full object-contain p-2 drop-shadow-2xl"
                     style={{
                       filter: `${theme.artworkFilter} drop-shadow(0 4px 20px ${typeTheme.glow})`,
