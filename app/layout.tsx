@@ -9,6 +9,7 @@ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin']
 const spaceGrotesk = Space_Grotesk({ variable: '--font-space-grotesk', subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
     default: 'PokéYou — Discover Your Pokémon Personality',
     template: '%s | PokéYou',
