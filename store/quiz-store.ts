@@ -16,13 +16,13 @@ interface QuizState {
   error: string | null;
   selectedTheme: CardThemeId;
   selectedEnvironment: EnvironmentTheme | null;
+  generatedCard: GeneratedCard | null;
 
   // Actions
   setStep: (step: QuizStep) => void;
   setName: (name: string) => void;
   setFavoritePokemon: (pokemon: Pokemon | null) => void;
   setAnswer: (question: keyof Pick<QuizAnswers, 'q1' | 'q2' | 'q3' | 'q4' | 'q5'>, answer: string) => void;
-  setGeneratedCard: (card: GeneratedCard) => void;
   setGeneratedCard: (card: GeneratedCard) => void;
   setGenerating: (generating: boolean) => void;
   setExporting: (exporting: boolean) => void;
