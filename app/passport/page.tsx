@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useQuizStore } from '@/store/quiz-store';
 import { TYPE_COLORS } from '@/types/pokemon';
 import { getTrainerRank } from '@/types/card';
+import { generateCardSlug } from '@/lib/utils/seo';
 import { QRCodeSVG } from 'qrcode.react';
 import { Download, Zap } from 'lucide-react';
 import { toPng } from 'html-to-image';
@@ -71,8 +72,9 @@ export default function PassportPage() {
     ? (generatedCard.buddy.sprites.official_artwork ?? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${generatedCard.buddy.id}.png`)
     : null;
 
+  const slug = generateCardSlug(pokemon.name, generatedCard.id);
   const cardUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/card/${generatedCard.id}`
+    ? `${window.location.origin}/card/${slug}`
     : '';
 
   const handleDownload = async () => {

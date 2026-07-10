@@ -13,6 +13,7 @@ import { PersonalityRadar } from '@/components/cards/PersonalityRadar';
 import { ShareButtons } from '@/components/shared/ShareButtons';
 import { TYPE_COLORS } from '@/types/pokemon';
 import { ARCardPreview } from '@/components/ar/ARCardPreview';
+import { generateCardSlug } from '@/lib/utils/seo';
 import {
   Sparkles, RotateCcw, Palette, ChevronDown,
   Map, BookOpen, Users, Star, Printer
@@ -65,7 +66,8 @@ export default function CardRevealPage() {
 
   const pokemon = generatedCard.matchedPokemon;
   const typeTheme = TYPE_COLORS[pokemon.primaryType];
-  const cardUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/card/${generatedCard.id}`;
+  const slug = generateCardSlug(pokemon.name, generatedCard.id);
+  const cardUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/card/${slug}`;
 
   const rarityColors = {
     'Secret Rare': { from: '#ff0080', via: '#ffd700', to: '#ff6b6b' },

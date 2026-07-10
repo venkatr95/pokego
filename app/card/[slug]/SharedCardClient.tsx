@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { useQuizStore } from '@/store/quiz-store';
 import CardRevealPage from '@/app/card/page';
 
-export default function SharedCardPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function SharedCardClient({ id }: { id: string }) {
   const { generatedCard, setGeneratedCard } = useQuizStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);

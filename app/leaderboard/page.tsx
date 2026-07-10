@@ -7,6 +7,8 @@ import { ArrowLeft, Trophy, Star } from 'lucide-react';
 import { useAchievementsStore } from '@/store/achievements-store';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { Breadcrumbs } from '@/components/seo/Breadcrumbs';
+import { AdUnit } from '@/components/ads/AdUnit';
 
 type LeaderboardUser = {
   rank: number;
@@ -76,6 +78,13 @@ export default function LeaderboardPage() {
           <Link href="/dashboard" className="text-brand-400 hover:text-brand-300 text-sm">
             My Dashboard
           </Link>
+        </div>
+
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Leaderboard', href: '/leaderboard' }]} />
+
+        <div className="flex justify-center mb-8">
+          <AdUnit slotId="leaderboard-top" width={728} height={90} className="hidden md:flex" />
+          <AdUnit slotId="leaderboard-top-mobile" width={320} height={50} className="md:hidden" />
         </div>
 
         <div className="text-center space-y-4">

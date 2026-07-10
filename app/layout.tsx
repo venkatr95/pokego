@@ -31,6 +31,9 @@ export const metadata: Metadata = {
     description: 'Answer 5 questions and generate your premium animated Pokémon trading card.',
     images: ['/og-image.png'],
   },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -41,6 +44,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navbar />
           <main>{children}</main>
         </ThemeProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "PokéYou",
+              "url": "https://pokeuu.com",
+              "logo": "https://pokeuu.com/logo.png",
+              "sameAs": [
+                "https://twitter.com/pokeyou",
+                "https://github.com/pokeyou"
+              ]
+            })
+          }}
+        />
       </body>
     </html>
   );
