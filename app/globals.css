@@ -286,3 +286,21 @@ body {
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* ── Exporting fixes for html-to-image ───────────────────────────────────────── */
+.exporting-card {
+  transform: none !important;
+  perspective: none !important;
+  box-shadow: none !important;
+}
+.exporting-card .card-flip-container {
+  transform: none !important;
+}
+.exporting-card .card-back-face {
+  display: none !important;
+}
+.exporting-card .card-front-face {
+  transform: none !important;
+  z-index: 10 !important;
+  opacity: 1 !important;
+}

@@ -10,6 +10,7 @@ import { TypeBadge } from './TypeBadge';
 import { RarityBadge } from './RarityBadge';
 import { formatDexNumber } from '@/lib/pokemon';
 import { getTrainerRank } from '@/types/card';
+import { useQuizStore } from '@/store/quiz-store';
 import { CARD_THEMES, type CardThemeId } from './themes';
 import { ENVIRONMENT_BACKGROUNDS, getEnvironmentForType, type EnvironmentTheme } from './themes/backgrounds';
 import { ExFullArtLayout } from './layouts/ExFullArtLayout';
@@ -70,6 +71,7 @@ export function PokemonCard({
   const [isZoomed, setIsZoomed] = useState(false);
   const [motionPictureUrl, setMotionPictureUrl] = useState<string | null>(null);
   const [glarePos, setGlarePos] = useState({ x: 50, y: 50 });
+  const isExporting = useQuizStore((s) => s.isExporting);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -181,16 +183,17 @@ export function PokemonCard({
         height: `${theme.heightRatio * scale}px`,
         transformStyle: 'preserve-3d',
         perspective: '1200px',
-        rotateX: interactive ? rotateX : 0,
-        rotateY: interactive ? rotateY : 0,
+        rotateX: interactive && !isExporting ? rotateX : 0,
+        rotateY: interactive && !isExporting ? rotateY : 0,
         fontFamily,
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       <motion.div
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+        className="card-flip-container"
+        animate={{ rotateY: isExporting ? 0 : (isFlipped ? 180 : 0) }}
+        transition={isExporting ? { duration: 0 } : { type: 'spring', stiffness: 260, damping: 20 }}
         style={{ width: '100%', height: '100%', transformStyle: 'preserve-3d', cursor: interactive ? 'pointer' : 'default' }}
         onClick={() => {
           if (interactive && !isZoomed) setIsFlipped(!isFlipped);
@@ -204,7 +207,7 @@ export function PokemonCard({
       >
         {/* Card back (Back Face) */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 card-back-face"
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
@@ -213,6 +216,9 @@ export function PokemonCard({
             overflow: 'hidden',
             boxShadow,
             border: `${theme.borderWidth} solid ${borderColor}60`,
+            backgroundColor: '#111',
+            zIndex: (isFlipped && !isExporting) ? 2 : 0,
+            pointerEvents: (isFlipped && !isExporting) ? 'auto' : 'none'
           }}
         >
           <img src="/img/pokeback.png" alt="Card Back" className="w-full h-full object-cover" style={{ transform: 'scaleX(-1)' }} />
@@ -220,8 +226,14 @@ export function PokemonCard({
 
         {/* Card Front (Front Face) */}
         <div
-          className="absolute inset-0"
-          style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+          className="absolute inset-0 card-front-face"
+          style={{ 
+            backfaceVisibility: 'hidden', 
+            WebkitBackfaceVisibility: 'hidden',
+            transform: 'rotateY(0deg)',
+            zIndex: (isFlipped && !isExporting) ? 0 : 2,
+            pointerEvents: (isFlipped && !isExporting) ? 'none' : 'auto'
+          }}
         >
           {/* ── Card face ─────────────────────────────────────────── */}
           {isFullArt ? (

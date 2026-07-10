@@ -11,8 +11,8 @@ import type { EnvironmentTheme } from '@/components/cards/themes/backgrounds';
 interface QuizState {
   currentStep: QuizStep;
   answers: QuizAnswers;
-  generatedCard: GeneratedCard | null;
   isGenerating: boolean;
+  isExporting: boolean;
   error: string | null;
   selectedTheme: CardThemeId;
   selectedEnvironment: EnvironmentTheme | null;
@@ -23,7 +23,9 @@ interface QuizState {
   setFavoritePokemon: (pokemon: Pokemon | null) => void;
   setAnswer: (question: keyof Pick<QuizAnswers, 'q1' | 'q2' | 'q3' | 'q4' | 'q5'>, answer: string) => void;
   setGeneratedCard: (card: GeneratedCard) => void;
+  setGeneratedCard: (card: GeneratedCard) => void;
   setGenerating: (generating: boolean) => void;
+  setExporting: (exporting: boolean) => void;
   setError: (error: string | null) => void;
   setSelectedTheme: (theme: CardThemeId) => void;
   setSelectedEnvironment: (env: EnvironmentTheme | null) => void;
@@ -52,6 +54,7 @@ export const useQuizStore = create<QuizState>()(
       answers: initialAnswers,
       generatedCard: null,
       isGenerating: false,
+      isExporting: false,
       error: null,
       selectedTheme: 'ex',
       selectedEnvironment: null,
@@ -76,6 +79,8 @@ export const useQuizStore = create<QuizState>()(
       setGeneratedCard: (card) => set({ generatedCard: card }),
 
       setGenerating: (isGenerating) => set({ isGenerating }),
+
+      setExporting: (isExporting) => set({ isExporting }),
 
       setError: (error) => set({ error }),
 

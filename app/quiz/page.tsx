@@ -6,15 +6,16 @@ import { useQuizStore } from '@/store/quiz-store';
 
 export default function QuizIndexPage() {
   const router = useRouter();
-  const { currentStep } = useQuizStore();
+  const { currentStep, resetQuiz } = useQuizStore();
 
   useEffect(() => {
     if (currentStep === 'complete') {
-      router.replace('/card');
+      resetQuiz();
+      router.replace('/quiz/name');
     } else {
       router.replace(`/quiz/${currentStep}`);
     }
-  }, [currentStep, router]);
+  }, [currentStep, resetQuiz, router]);
 
   return null;
 }

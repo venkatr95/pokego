@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Download, Image, FileImage, ChevronDown } from 'lucide-react';
 import { toPng, toJpeg } from 'html-to-image';
 import type { GeneratedCard } from '@/types/card';
+import { useQuizStore } from '@/store/quiz-store';
 
 interface DownloadButtonProps {
   cardElementId: string;
@@ -22,6 +23,7 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
   const [open, setOpen] = useState(false);
   const [downloading, setDownloading] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
+  const setExporting = useQuizStore(s => s.setExporting);
   
   const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
@@ -74,11 +76,26 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
     if (!element) return;
 
     setDownloading(format.id);
+    element.classList.add('exporting-card');
+    setExporting(true);
+
     try {
+      // Wait for React to re-render card in flat, front-facing state
+      await new Promise((r) => setTimeout(r, 200));
+
+      // Workaround for html-to-image bug on mobile Safari (pre-render to load images)
+      if (isTouchDevice) {
+        try {
+          await format.fn(element, { pixelRatio: 1, quality: 0.1, cacheBust: false });
+        } catch (e) {
+          // Ignore pre-render errors
+        }
+      }
+
       let dataUrl = await format.fn(element, {
-        quality: 0.98,
-        pixelRatio: isTouchDevice ? 1.5 : 3, // Prevent mobile safari memory crashes
-        cacheBust: true,
+        quality: 1.0,
+        pixelRatio: isTouchDevice ? 2 : 3, // Prevent mobile safari memory crashes
+        cacheBust: false, // Critical: Next.js images fail with cacheBust: true
         backgroundColor: 'transparent',
         style: {
           transform: 'none',
@@ -107,6 +124,9 @@ export function DownloadButton({ cardElementId, card }: DownloadButtonProps) {
       console.error('Download failed:', e);
       alert('Failed to generate image. Please try again. Error: ' + (e instanceof Error ? e.message : String(e)));
     } finally {
+      element.classList.remove('exporting-card');
+      setExporting(false);
+
       setDownloading(null);
       if (!isTouchDevice) setOpen(false);
     }
