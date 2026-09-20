@@ -43,7 +43,7 @@ export function ARCardPreview({ imageUrl, pokemonName }: ARCardPreviewProps) {
   const [store] = useState(() => createXRStore());
 
   return (
-    <div className="w-full h-[400px] relative rounded-2xl overflow-hidden bg-background/50 border border-white/10">
+    <div className="w-full h-[400px] relative rounded-2xl overflow-hidden bg-background/50 border border-border">
       <div className="absolute top-4 left-4 z-10">
         <button 
           className="btn-primary text-sm py-2 px-4 rounded-full bg-brand-500 text-foreground font-bold"

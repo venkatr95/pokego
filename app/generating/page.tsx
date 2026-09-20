@@ -23,7 +23,7 @@ export default function GeneratingPage() {
 
   useEffect(() => {
     if (!answers.name || !answers.q1) {
-      router.replace('/quiz/name');
+      router.replace('/quiz');
       return;
     }
 

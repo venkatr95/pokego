@@ -1,0 +1,63 @@
+{
+  "trainer": {
+    "nickname": "DemoTrainer"
+  },
+  "importedAt": "2026-09-13T00:00:00.000Z",
+  "pokemon": [
+    {
+      "speciesId": 1,
+      "formId": 163,
+      "caught": true,
+      "shiny": true,
+      "candy": 30,
+      "iv": { "attack": 15, "defense": 15, "stamina": 15 }
+    },
+    {
+      "speciesId": 2,
+      "formId": 166,
+      "caught": true,
+      "candy": 100
+    },
+    {
+      "speciesId": 4,
+      "formId": 0,
+      "caught": true,
+      "candy": 12
+    },
+    {
+      "speciesId": 5,
+      "formId": 0,
+      "caught": true
+    },
+    {
+      "speciesId": 25,
+      "formId": 0,
+      "caught": true,
+      "shiny": true,
+      "lucky": true,
+      "shadow": true
+    },
+    {
+      "speciesId": 133,
+      "formId": 0,
+      "caught": true,
+      "candy": 40
+    },
+    {
+      "speciesId": 134,
+      "formId": 0,
+      "caught": true
+    },
+    {
+      "speciesId": 135,
+      "formId": 0,
+      "caught": true
+    },
+    {
+      "speciesId": 150,
+      "formId": 0,
+      "caught": true,
+      "hundo": true
+    }
+  ]
+}

@@ -144,7 +144,7 @@ export function Hero() {
         >
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
             Everything you need for your{' '}
-            <span className="text-brand-400">perfect card</span>
+            <span className="text-brand-600 dark:text-brand-400">perfect card</span>
           </h2>
           <p className="text-foreground/50 max-w-xl mx-auto">
             Premium features, beautiful animations, and AI-powered personalization.

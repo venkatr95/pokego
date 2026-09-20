@@ -8,7 +8,7 @@ import { ArrowLeft, Sparkles, Check, Star, Zap, Image as ImageIcon } from 'lucid
 
 const FEATURES = [
   { icon: <Zap className="w-5 h-5 text-yellow-400" />, title: 'Unlimited Generations', desc: 'No daily limits on taking the quiz and generating cards.' },
-  { icon: <Star className="w-5 h-5 text-brand-400" />, title: 'Shiny Boost', desc: '10x higher chance to generate a Shiny Pokémon card.' },
+  { icon: <Star className="w-5 h-5 text-brand-600 dark:text-brand-400" />, title: 'Shiny Boost', desc: '10x higher chance to generate a Shiny Pokémon card.' },
   { icon: <ImageIcon className="w-5 h-5 text-pink-400" />, title: 'Premium Backgrounds', desc: 'Access exclusive animated holographic backgrounds.' },
   { icon: <Check className="w-5 h-5 text-green-400" />, title: 'Physical Print Discount', desc: 'Get 50% off if you decide to print a physical holographic card.' },
 ];
@@ -72,7 +72,7 @@ export default function PremiumPage() {
                 transition={{ delay: i * 0.1 }}
                 className="flex items-start gap-4"
               >
-                <div className="mt-1 p-2 bg-foreground/5 rounded-xl border border-white/10">
+                <div className="mt-1 p-2 bg-foreground/5 rounded-xl border border-border">
                   {feat.icon}
                 </div>
                 <div>

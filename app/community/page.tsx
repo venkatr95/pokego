@@ -76,7 +76,7 @@ export default function CommunityPage() {
             <ArrowLeft className="w-4 h-4" /> Back
           </button>
           
-          <Link href="/dashboard" className="text-brand-400 hover:text-brand-300 text-sm">
+          <Link href="/dashboard" className="text-brand-600 dark:text-brand-400 hover:text-brand-500 dark:hover:text-brand-300 text-sm">
             My Dashboard
           </Link>
         </div>
@@ -105,7 +105,7 @@ export default function CommunityPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="glass-card rounded-2xl p-5 hover:border-white/20 transition-colors group cursor-pointer"
+                className="glass-card rounded-2xl p-5 hover:border-foreground/20 transition-colors group cursor-pointer"
               >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
@@ -114,17 +114,17 @@ export default function CommunityPage() {
                     </div>
                     <span className="font-bold text-foreground/80 text-sm">{post.trainer}</span>
                   </div>
-                  <span className="text-xs bg-foreground/10 px-2 py-1 rounded border border-white/5 text-foreground/60">
+                  <span className="text-xs bg-foreground/10 px-2 py-1 rounded border border-border text-foreground/60">
                     {post.theme}
                   </span>
                 </div>
                 
                 {/* Mock Card Preview */}
-                <div className="aspect-[63/88] w-full rounded-xl bg-background/40 border border-white/5 flex flex-col items-center justify-center mb-4 group-hover:bg-foreground/5 transition-colors relative overflow-hidden">
+                <div className="aspect-[63/88] w-full rounded-xl bg-background/40 border border-border flex flex-col items-center justify-center mb-4 group-hover:bg-foreground/5 transition-colors relative overflow-hidden">
                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-white/5" />
                    <span className="text-4xl mb-2">🎴</span>
                    <span className="font-display font-bold">{post.pokemon}</span>
-                   <span className="text-xs text-brand-400">{post.rarity}</span>
+                   <span className="text-xs text-brand-600 dark:text-brand-400">{post.rarity}</span>
                 </div>
                 
                 <div className="flex items-center justify-between text-foreground/50 text-sm">

@@ -85,8 +85,8 @@ export default function RewardsPage() {
                     isActive
                       ? 'bg-foreground/10 border-pink-500/50 shadow-[0_0_15px_rgba(236,72,153,0.2)]'
                       : isPast
-                      ? 'bg-background/30 border-white/5 opacity-50'
-                      : 'bg-foreground/5 border-white/10'
+                      ? 'bg-background/30 border-border opacity-50'
+                      : 'bg-foreground/5 border-border'
                   }`}
                 >
                   {isPast && (
@@ -113,7 +113,7 @@ export default function RewardsPage() {
               className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${
                 canClaim
                   ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-foreground shadow-[0_0_20px_rgba(236,72,153,0.4)] hover:scale-[1.02]'
-                  : 'glass border border-white/10 text-foreground/40 cursor-not-allowed'
+                  : 'glass border border-border text-foreground/40 cursor-not-allowed'
               }`}
             >
               {canClaim ? (

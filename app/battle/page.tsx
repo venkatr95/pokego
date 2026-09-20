@@ -140,7 +140,7 @@ export default function BattlePage() {
         <div className="text-6xl mb-4">⚔️</div>
         <h1 className="font-display text-2xl font-bold text-foreground text-center">No Trainer Found!</h1>
         <p className="text-foreground/50 text-center">Complete the quiz first to enter battle.</p>
-        <button onClick={() => router.push('/quiz/name')} className="btn-primary flex items-center gap-2">
+        <button onClick={() => router.push('/quiz')} className="btn-primary flex items-center gap-2">
           <Zap className="w-4 h-4" /> Take the Quiz
         </button>
       </div>
@@ -194,7 +194,7 @@ export default function BattlePage() {
       <div className="relative z-10 w-full max-w-4xl mx-auto">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 glass border border-white/10 rounded-full px-4 py-2 text-sm text-foreground/60 mb-4">
+          <div className="inline-flex items-center gap-2 glass border border-border rounded-full px-4 py-2 text-sm text-foreground/60 mb-4">
             <Swords className="w-3.5 h-3.5" /> Battle Simulator
           </div>
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
@@ -221,7 +221,7 @@ export default function BattlePage() {
                     onClick={() => { setSelectedOpponent(opp); setPhase('preview'); }}
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="glass-card rounded-2xl p-5 text-left hover:border-white/20 transition-all"
+                    className="glass-card rounded-2xl p-5 text-left hover:border-foreground/20 transition-all"
                     style={{ border: '1px solid rgba(255,255,255,0.08)' }}
                   >
                     <div className="flex items-center gap-3 mb-3">
@@ -257,12 +257,12 @@ export default function BattlePage() {
                   className="glass-card rounded-2xl p-5 text-center flex flex-col items-center justify-center border border-dashed border-brand-500/50 bg-brand-500/10 hover:bg-brand-500/20 transition-all cursor-pointer"
                   onClick={handleCopyChallengeLink}
                 >
-                  <div className="w-12 h-12 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-600 dark:text-brand-400 mb-3">
                     {copiedLink ? <Check className="w-6 h-6" /> : <LinkIcon className="w-6 h-6" />}
                   </div>
                   <p className="font-bold text-foreground mb-1">Challenge a Friend</p>
                   <p className="text-xs text-foreground/50 mb-3 px-2">Generate a battle link to pit your cards against each other.</p>
-                  <div className="text-xs font-bold text-brand-400 bg-brand-500/20 px-3 py-1.5 rounded-full">
+                  <div className="text-xs font-bold text-brand-600 dark:text-brand-400 bg-brand-500/20 px-3 py-1.5 rounded-full">
                     {copiedLink ? 'Link Copied!' : 'Copy Battle Link'}
                   </div>
                 </motion.div>
@@ -327,7 +327,7 @@ export default function BattlePage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setPhase('select')}
-                  className="flex-1 py-3 rounded-xl glass border border-white/10 text-foreground/60 hover:text-foreground text-sm transition-all"
+                  className="flex-1 py-3 rounded-xl glass border border-border text-foreground/60 hover:text-foreground text-sm transition-all"
                 >
                   ← Back
                 </button>
@@ -443,7 +443,7 @@ export default function BattlePage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => { setPhase('select'); setSelectedOpponent(null); setResult(null); }}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl glass border border-white/10 text-foreground/60 hover:text-foreground text-sm transition-all"
+                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl glass border border-border text-foreground/60 hover:text-foreground text-sm transition-all"
                 >
                   <RotateCcw className="w-4 h-4" /> Fight Again
                 </button>

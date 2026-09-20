@@ -52,7 +52,7 @@ export default function PassportPage() {
         <div className="text-6xl mb-4">🪪</div>
         <h1 className="font-display text-2xl font-bold text-foreground text-center">No Trainer Passport Found</h1>
         <p className="text-foreground/50 text-center">Complete the personality quiz to generate your Trainer Passport.</p>
-        <button onClick={() => router.push('/quiz/name')} className="btn-primary flex items-center gap-2">
+        <button onClick={() => router.push('/quiz')} className="btn-primary flex items-center gap-2">
           <Zap className="w-4 h-4" /> Take the Quiz
         </button>
       </div>
@@ -100,7 +100,7 @@ export default function PassportPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 glass border border-white/10 rounded-full px-4 py-2 text-sm text-foreground/60 mb-4">
+          <div className="inline-flex items-center gap-2 glass border border-border rounded-full px-4 py-2 text-sm text-foreground/60 mb-4">
             🪪 Trainer Passport
           </div>
           <h1 className="font-display text-3xl font-bold text-foreground">Digital Trainer ID</h1>

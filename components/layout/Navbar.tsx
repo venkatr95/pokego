@@ -15,7 +15,7 @@ export function Navbar() {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-white/10"
+      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border"
     >
       <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
         {/* Logo */}
@@ -29,23 +29,26 @@ export function Navbar() {
             transition={{ duration: 0.5 }}
             className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-purple-600 flex items-center justify-center shrink-0"
           >
-            <Zap className="w-4 h-4 text-foreground" />
+            <Zap className="w-4 h-4 text-white" />
           </motion.div>
-          <span className="bg-gradient-to-r from-brand-400 to-purple-400 bg-clip-text text-transparent truncate hidden sm:block">
+          <span className="bg-gradient-to-r from-brand-500 to-purple-500 dark:from-brand-400 dark:to-purple-400 bg-clip-text text-transparent truncate hidden sm:block">
             PokéYou
           </span>
         </Link>
 
         {/* Nav links */}
-        <div className="hidden md:flex items-center gap-6 text-sm text-foreground/60">
+        <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
           <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
           <Link href="/quiz" className="hover:text-foreground transition-colors">Take Quiz</Link>
+          <Link href="/pokemon-go" className="hover:text-foreground transition-colors">Pokémon GO</Link>
         </div>
 
         {/* Right side */}
         <div className="flex items-center gap-2 md:gap-3">
-          {/* <ThemeToggle /> disabled as requested */}
-          {/* <LoginButton /> disabled as requested */}
+          <ThemeToggle />
+          <div className="hidden sm:block">
+            <LoginButton />
+          </div>
           <Link
             href="/quiz"
             className="btn-primary text-xs py-1.5 px-3 md:text-sm md:py-2 md:px-5"

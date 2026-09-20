@@ -43,7 +43,7 @@ export default function DashboardPage() {
           </Link>
 
           <Link href="/card" className="glass-card rounded-2xl p-5 hover:border-brand-500/40 transition-colors block">
-            <div className="text-brand-400 mb-2"><CreditCard className="w-6 h-6" /></div>
+            <div className="text-brand-600 dark:text-brand-400 mb-2"><CreditCard className="w-6 h-6" /></div>
             <p className="text-lg font-bold text-foreground">My Card</p>
             <p className="text-xs text-foreground/50">View Active Card</p>
           </Link>
@@ -76,9 +76,9 @@ export default function DashboardPage() {
                 </Link>
               </div>
             ) : (
-              <div className="text-center p-6 bg-foreground/5 rounded-xl border border-dashed border-white/20">
+              <div className="text-center p-6 bg-foreground/5 rounded-xl border border-dashed border-border">
                 <p className="text-foreground/50 text-sm mb-4">No cards generated yet.</p>
-                <Link href="/quiz/name" className="btn-primary text-sm py-2 px-4 inline-flex">
+                <Link href="/quiz" className="btn-primary text-sm py-2 px-4 inline-flex">
                   Take the Quiz
                 </Link>
               </div>

@@ -1,34 +1,150 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
-/* ── CSS Custom Properties ─────────────────────────────────────────────────── */
-:root {
-  --glow-color: rgba(91, 110, 247, 0.5);
+/* Map CSS variables into Tailwind v4 theme colors.
+   Brand/type scales must live here — Tailwind v4 does not pick them up from tailwind.config.ts. */
+@theme inline {
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+  --color-card: rgb(var(--card));
+  --color-card-foreground: rgb(var(--card-foreground));
+  --color-popover: rgb(var(--popover));
+  --color-popover-foreground: rgb(var(--popover-foreground));
+  --color-primary: rgb(var(--primary));
+  --color-primary-foreground: rgb(var(--primary-foreground));
+  --color-secondary: rgb(var(--secondary));
+  --color-secondary-foreground: rgb(var(--secondary-foreground));
+  --color-muted: rgb(var(--muted));
+  --color-muted-foreground: rgb(var(--muted-foreground));
+  --color-accent: rgb(var(--accent));
+  --color-accent-foreground: rgb(var(--accent-foreground));
+  --color-destructive: rgb(var(--destructive));
+  --color-destructive-foreground: rgb(var(--destructive-foreground));
+  --color-border: rgb(var(--border));
+  --color-input: rgb(var(--input));
+  --color-ring: rgb(var(--ring));
 
-  /* Light Theme */
-  --background: 240 240 245; /* #f0f0f5 */
-  --foreground: 10 11 15; /* #0a0b0f */
+  /* Brand scale (used by bg-brand-*, text-brand-*, etc.) */
+  --color-brand-50: #f0f4ff;
+  --color-brand-100: #e0e9ff;
+  --color-brand-200: #c7d6fe;
+  --color-brand-300: #a4bafd;
+  --color-brand-400: #7d95fb;
+  --color-brand-500: #5b6ef7;
+  --color-brand-600: #4451ec;
+  --color-brand-700: #3841d1;
+  --color-brand-800: #3037a9;
+  --color-brand-900: #2c3485;
+  --color-brand-950: #1c2057;
+
+  /* Pokémon type colors */
+  --color-type-normal: #a8a878;
+  --color-type-fire: #f08030;
+  --color-type-water: #6890f0;
+  --color-type-electric: #f8d030;
+  --color-type-grass: #78c850;
+  --color-type-ice: #98d8d8;
+  --color-type-fighting: #c03028;
+  --color-type-poison: #a040a0;
+  --color-type-ground: #e0c068;
+  --color-type-flying: #a890f0;
+  --color-type-psychic: #f85888;
+  --color-type-bug: #a8b820;
+  --color-type-rock: #b8a038;
+  --color-type-ghost: #705898;
+  --color-type-dragon: #7038f8;
+  --color-type-dark: #705848;
+  --color-type-steel: #b8b8d0;
+  --color-type-fairy: #ee99ac;
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+  --font-display: var(--font-space-grotesk), var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* ── Semantic theme tokens ─────────────────────────────────────────────────── */
+:root {
+  --glow-color: rgba(91, 110, 247, 0.45);
+
+  /* Surfaces */
+  --background: 245 246 250;
+  --foreground: 15 17 23;
+  --card: 255 255 255;
+  --card-foreground: 15 17 23;
+  --popover: 255 255 255;
+  --popover-foreground: 15 17 23;
+
+  /* Brand / interactive */
+  --primary: 91 110 247;
+  --primary-foreground: 255 255 255;
+  --secondary: 232 234 242;
+  --secondary-foreground: 30 34 48;
+  --accent: 236 239 255;
+  --accent-foreground: 45 55 160;
+  --muted: 232 234 242;
+  --muted-foreground: 90 96 114;
+
+  /* Borders / focus */
+  --border: 210 214 228;
+  --input: 210 214 228;
+  --ring: 91 110 247;
+  --destructive: 220 50 60;
+  --destructive-foreground: 255 255 255;
+
+  /* Glass helpers */
+  --glass-bg: 255 255 255;
+  --glass-border: 15 17 23;
+  --glass-shadow: 0 10px 30px -12px rgba(15, 17, 23, 0.12), 0 2px 8px -4px rgba(15, 17, 23, 0.08);
+
+  /* Dialog */
+  --dialog-overlay: 15 17 23;
 
   /* Pokémon type theme (overridden by JS) */
   --type-primary:   #6890F0;
   --type-secondary: #7eb8ff;
   --type-bg:        rgba(104, 144, 240, 0.15);
-  --type-text:      #7eb8ff;
-  --type-glow:      rgba(104, 144, 240, 0.5);
+  --type-text:      #3b6fd8;
+  --type-glow:      rgba(104, 144, 240, 0.45);
 
-  /* Card dimensions */
   --card-width:  380px;
   --card-height: 540px;
   --card-radius: 20px;
 }
 
 .dark {
-  /* Dark Theme */
   --background: 10 11 15;
   --foreground: 240 240 245;
+  --card: 18 20 28;
+  --card-foreground: 240 240 245;
+  --popover: 18 20 28;
+  --popover-foreground: 240 240 245;
+
+  --primary: 91 110 247;
+  --primary-foreground: 255 255 255;
+  --secondary: 32 36 48;
+  --secondary-foreground: 230 232 240;
+  --accent: 36 40 68;
+  --accent-foreground: 190 200 255;
+  --muted: 28 31 42;
+  --muted-foreground: 150 156 176;
+
+  --border: 48 52 68;
+  --input: 48 52 68;
+  --ring: 125 149 251;
+  --destructive: 239 68 68;
+  --destructive-foreground: 255 255 255;
+
+  --glass-bg: 255 255 255;
+  --glass-border: 255 255 255;
+  --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+
+  --dialog-overlay: 0 0 0;
+
+  --type-text: #7eb8ff;
+  --glow-color: rgba(91, 110, 247, 0.5);
 }
 
-/* ── Base Defaults ──────────────────────────────────────────────────────── */
+/* ── Base ─────────────────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
 }
@@ -41,36 +157,86 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Glassmorphism Utilities ─────────────────────────────────────────────────── */
+/* Native selects inherit theme colors (avoids dark option menus in light mode) */
+select,
+select option {
+  background-color: rgb(var(--card));
+  color: rgb(var(--card-foreground));
+}
+
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+
+/* ── Glassmorphism ────────────────────────────────────────────────────────── */
+/* Light: solid surfaces so panels don't wash into the page. Dark: translucent. */
 .glass {
-  background: rgb(var(--foreground) / 0.05);
+  background: rgb(var(--card));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgb(var(--foreground) / 0.1);
+  border: 1px solid rgb(var(--border));
+}
+
+.dark .glass {
+  background: rgb(var(--glass-bg) / 0.05);
+  border-color: rgb(var(--glass-border) / 0.1);
 }
 
 .glass-strong {
-  background: rgb(var(--foreground) / 0.1);
+  background: rgb(var(--card));
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgb(var(--foreground) / 0.15);
+  border: 1px solid rgb(var(--border));
+}
+
+.dark .glass-strong {
+  background: rgb(var(--glass-bg) / 0.1);
+  border-color: rgb(var(--glass-border) / 0.14);
 }
 
 .glass-card {
-  background: linear-gradient(
-    135deg,
-    rgb(var(--foreground) / 0.08) 0%,
-    rgb(var(--foreground) / 0.03) 100%
-  );
+  background: rgb(var(--card));
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgb(var(--foreground) / 0.12);
-  box-shadow:
-    0 25px 50px -12px rgba(0, 0, 0, 0.8),
-    inset 0 1px 0 rgb(var(--foreground) / 0.1);
+  border: 1px solid rgb(var(--border));
+  box-shadow: var(--glass-shadow), inset 0 1px 0 rgb(255 255 255 / 0.7);
+  color: rgb(var(--card-foreground));
 }
 
-/* ── Holographic Foil Effect ─────────────────────────────────────────────────── */
+.dark .glass-card {
+  background: linear-gradient(
+    135deg,
+    rgb(var(--glass-bg) / 0.08) 0%,
+    rgb(var(--glass-bg) / 0.03) 100%
+  );
+  border-color: rgb(var(--glass-border) / 0.12);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 rgb(var(--glass-border) / 0.08);
+  color: inherit;
+}
+
+/* Dialog surface */
+.dialog-surface {
+  background-color: rgb(var(--popover));
+  background-image: none;
+  color: rgb(var(--popover-foreground));
+  border: 1px solid rgb(var(--border));
+  box-shadow:
+    0 25px 60px -20px rgba(15, 17, 23, 0.35),
+    0 0 0 1px rgb(var(--border) / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.45);
+}
+
+.dark .dialog-surface {
+  background-color: rgb(18 20 28);
+  background-image: linear-gradient(165deg, rgb(24 27 38) 0%, rgb(14 16 24) 100%);
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgb(255 255 255 / 0.06),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+/* ── Holographic / card effects (unchanged behavior) ──────────────────────── */
 .holographic-overlay {
   position: absolute;
   inset: 0;
@@ -99,7 +265,6 @@ body {
   opacity: 1;
 }
 
-/* ── Card Shine ──────────────────────────────────────────────────────────────── */
 .card-shine {
   position: absolute;
   inset: 0;
@@ -115,7 +280,6 @@ body {
   animation: shimmer 3s linear infinite;
 }
 
-/* ── Pokémon Card Base ─────────────────────────────────────────────────────── */
 .pokemon-card {
   width: var(--card-width);
   height: var(--card-height);
@@ -131,7 +295,6 @@ body {
   transform: translateY(-4px) scale(1.01);
 }
 
-/* ── Type badge colors ──────────────────────────────────────────────────────── */
 .type-badge {
   display: inline-flex;
   align-items: center;
@@ -144,10 +307,9 @@ body {
   text-transform: uppercase;
 }
 
-/* ── Stat bar ───────────────────────────────────────────────────────────────── */
 .stat-bar-track {
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(var(--foreground) / 0.1);
   border-radius: 100px;
   overflow: hidden;
 }
@@ -159,7 +321,6 @@ body {
   background: linear-gradient(90deg, var(--type-primary), var(--type-secondary));
 }
 
-/* ── Rarity Animations ──────────────────────────────────────────────────────── */
 .rarity-legendary {
   background: linear-gradient(135deg, #d97706, #fbbf24, #d97706);
   background-size: 200% 200%;
@@ -187,7 +348,6 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* ── Particle Canvas ─────────────────────────────────────────────────────────── */
 .particle-canvas {
   position: fixed;
   inset: 0;
@@ -195,10 +355,9 @@ body {
   z-index: 0;
 }
 
-/* ── Progress bar ───────────────────────────────────────────────────────────── */
 .quiz-progress {
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(var(--foreground) / 0.1);
   border-radius: 100px;
   overflow: hidden;
 }
@@ -210,12 +369,11 @@ body {
   transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Button effects ─────────────────────────────────────────────────────────── */
 .btn-primary {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #5b6ef7, #7c3aed);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgb(255 255 255 / 0.15);
   border-radius: 12px;
   padding: 12px 28px;
   font-weight: 600;
@@ -248,22 +406,20 @@ body {
   opacity: 1;
 }
 
-/* ── Scrollbar styling ──────────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgb(var(--foreground) / 0.05);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(var(--foreground) / 0.2);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgb(var(--foreground) / 0.35);
 }
 
-/* ── Reduced motion ─────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -274,20 +430,17 @@ body {
   }
 }
 
-/* ── Selection ──────────────────────────────────────────────────────────────── */
 ::selection {
   background: rgba(91, 110, 247, 0.4);
   color: white;
 }
 
-/* ── Focus ring ─────────────────────────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid #5b6ef7;
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* ── Exporting fixes for html-to-image ───────────────────────────────────────── */
 .exporting-card {
   transform: none !important;
   perspective: none !important;

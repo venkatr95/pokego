@@ -70,7 +70,7 @@ export function ShareButtons({ card, cardUrl }: ShareButtonsProps) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleWhatsApp}
-          className="flex items-center gap-2 py-2.5 px-4 rounded-xl glass border border-white/10 hover:border-green-500/40 hover:bg-green-500/10 transition-all text-sm text-foreground/70 hover:text-foreground"
+          className="flex items-center gap-2 py-2.5 px-4 rounded-xl glass border border-border hover:border-green-500/40 hover:bg-green-500/10 transition-all text-sm text-foreground/70 hover:text-foreground"
         >
           <span className="text-base">💬</span>
           WhatsApp
@@ -81,7 +81,7 @@ export function ShareButtons({ card, cardUrl }: ShareButtonsProps) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleTwitter}
-          className="flex items-center gap-2 py-2.5 px-4 rounded-xl glass border border-white/10 hover:border-sky-500/40 hover:bg-sky-500/10 transition-all text-sm text-foreground/70 hover:text-foreground"
+          className="flex items-center gap-2 py-2.5 px-4 rounded-xl glass border border-border hover:border-sky-500/40 hover:bg-sky-500/10 transition-all text-sm text-foreground/70 hover:text-foreground"
         >
           <span className="text-base">🐦</span>
           Twitter/X
@@ -92,7 +92,7 @@ export function ShareButtons({ card, cardUrl }: ShareButtonsProps) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleGmail}
-          className="flex items-center gap-2 py-2.5 px-4 rounded-xl glass border border-white/10 hover:border-red-500/40 hover:bg-red-500/10 transition-all text-sm text-foreground/70 hover:text-foreground"
+          className="flex items-center gap-2 py-2.5 px-4 rounded-xl glass border border-border hover:border-red-500/40 hover:bg-red-500/10 transition-all text-sm text-foreground/70 hover:text-foreground"
         >
           <Mail className="w-4 h-4" />
           Gmail
@@ -103,7 +103,7 @@ export function ShareButtons({ card, cardUrl }: ShareButtonsProps) {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleNativeShare}
-          className="flex items-center gap-2 py-2.5 px-4 rounded-xl glass border border-white/10 hover:border-brand-500/40 hover:bg-brand-500/10 transition-all text-sm text-foreground/70 hover:text-foreground"
+          className="flex items-center gap-2 py-2.5 px-4 rounded-xl glass border border-border hover:border-brand-500/40 hover:bg-brand-500/10 transition-all text-sm text-foreground/70 hover:text-foreground"
         >
           <Share2 className="w-4 h-4" />
           Share
@@ -115,7 +115,7 @@ export function ShareButtons({ card, cardUrl }: ShareButtonsProps) {
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
         onClick={handleCopyLink}
-        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl glass border border-white/10 hover:border-white/20 transition-all text-sm text-foreground/60 hover:text-foreground"
+        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl glass border border-border hover:border-foreground/20 transition-all text-sm text-foreground/60 hover:text-foreground"
       >
         {copied ? (
           <>

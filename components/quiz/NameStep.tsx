@@ -41,7 +41,7 @@ export function NameStep({ question, onNext, onBack }: NameStepProps) {
         className="text-center mb-8"
       >
         <div className="w-16 h-16 rounded-2xl bg-brand-500/20 flex items-center justify-center mx-auto mb-4">
-          <User className="w-8 h-8 text-brand-400" />
+          <User className="w-8 h-8 text-brand-600 dark:text-brand-400" />
         </div>
         <h2 className="font-display text-2xl font-bold text-foreground mb-2">{question.question}</h2>
         <p className="text-foreground/50 text-sm">This will appear on your card</p>
@@ -56,7 +56,7 @@ export function NameStep({ question, onNext, onBack }: NameStepProps) {
             placeholder="Enter your trainer name..."
             autoComplete="given-name"
             autoFocus
-            className="w-full bg-foreground/5 border border-white/10 rounded-xl px-5 py-4 text-foreground text-lg placeholder:text-foreground/30 focus:outline-none focus:border-brand-500/50 focus:bg-foreground/8 transition-all"
+            className="w-full bg-foreground/5 border border-border rounded-xl px-5 py-4 text-foreground text-lg placeholder:text-foreground/30 focus:outline-none focus:border-brand-500/50 focus:bg-foreground/8 transition-all"
           />
           {errors.name && (
             <motion.p
@@ -73,7 +73,7 @@ export function NameStep({ question, onNext, onBack }: NameStepProps) {
           <button
             type="button"
             onClick={onBack}
-            className="flex items-center gap-1 px-5 py-3 rounded-xl glass border border-white/10 text-foreground/60 hover:text-foreground hover:border-white/20 transition-all text-sm"
+            className="flex items-center gap-1 px-5 py-3 rounded-xl glass border border-border text-foreground/60 hover:text-foreground hover:border-foreground/20 transition-all text-sm"
           >
             <ChevronLeft className="w-4 h-4" />
             Back

@@ -36,7 +36,7 @@ export default function TeamBuilderPage() {
         <div className="text-6xl mb-4">👥</div>
         <h1 className="font-display text-2xl font-bold text-foreground text-center">No Team Data Found</h1>
         <p className="text-foreground/50 text-center">Complete the personality quiz to generate your dream team.</p>
-        <button onClick={() => router.push('/quiz/name')} className="btn-primary flex items-center gap-2">
+        <button onClick={() => router.push('/quiz')} className="btn-primary flex items-center gap-2">
           <Zap className="w-4 h-4" /> Take the Quiz
         </button>
       </div>
@@ -71,7 +71,7 @@ export default function TeamBuilderPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 glass border border-white/10 rounded-full px-4 py-2 text-sm text-foreground/60 mb-4">
+          <div className="inline-flex items-center gap-2 glass border border-border rounded-full px-4 py-2 text-sm text-foreground/60 mb-4">
             <Users className="w-3.5 h-3.5" /> AI Team Builder
           </div>
           <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">Your Dream Team</h1>
@@ -181,7 +181,7 @@ export default function TeamBuilderPage() {
               className="glass-card rounded-3xl p-6 flex flex-col items-center justify-center text-center min-h-[300px]"
               style={{ border: '1px dashed rgba(255,255,255,0.1)' }}
             >
-              <div className="w-16 h-16 rounded-full border-2 border-dashed border-white/20 flex items-center justify-center text-foreground/20 text-2xl mb-4">
+              <div className="w-16 h-16 rounded-full border-2 border-dashed border-border flex items-center justify-center text-foreground/20 text-2xl mb-4">
                 ?
               </div>
               <p className="text-foreground/40 font-medium">Empty Slot</p>
@@ -199,7 +199,7 @@ export default function TeamBuilderPage() {
         >
           <button
             onClick={() => router.push('/card')}
-            className="px-6 py-3 rounded-xl glass border border-white/10 text-foreground/60 hover:text-foreground transition-all text-sm"
+            className="px-6 py-3 rounded-xl glass border border-border text-foreground/60 hover:text-foreground transition-all text-sm"
           >
             ← Back to Card
           </button>

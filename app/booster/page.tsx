@@ -140,7 +140,7 @@ export default function BoosterPackPage() {
         <h1 className="font-display text-2xl font-bold text-foreground text-center">No Card to Open!</h1>
         <p className="text-foreground/50 text-center">Take the personality quiz first to get your Pokémon card.</p>
         <button
-          onClick={() => router.push('/quiz/name')}
+          onClick={() => router.push('/quiz')}
           className="btn-primary flex items-center gap-2"
         >
           <Zap className="w-4 h-4" /> Take the Quiz

@@ -68,7 +68,7 @@ export default function AchievementsPage() {
                   className={`p-4 rounded-xl border transition-all ${
                     isUnlocked 
                       ? 'bg-foreground/5 border-yellow-500/30 shadow-[0_0_15px_rgba(234,179,8,0.1)]' 
-                      : 'bg-background/20 border-white/5 opacity-60'
+                      : 'bg-background/20 border-border opacity-60'
                   }`}
                 >
                   <div className="flex gap-4">

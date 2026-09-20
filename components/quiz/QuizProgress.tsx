@@ -36,7 +36,7 @@ export function QuizProgress({ current, total, stepId }: QuizProgressProps) {
           PokéYou
         </Link>
         <div className="text-sm text-foreground/40">
-          <span className="text-brand-400 font-semibold">{current}</span>
+          <span className="text-brand-600 dark:text-brand-400 font-semibold">{current}</span>
           <span> / {total}</span>
           <span className="ml-2 text-foreground/30">— {STEP_LABELS[stepId]}</span>
         </div>

@@ -177,7 +177,7 @@ export function PokemonSearchStep({ question, onNext, onBack }: PokemonSearchSte
             onChange={handleInput}
             onFocus={() => query && setOpen(true)}
             placeholder={selected ? 'Search to change...' : 'Search Pokémon by name or number...'}
-            className="w-full bg-foreground/5 border border-white/10 rounded-xl pl-10 pr-4 py-3.5 text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-brand-500/50 transition-all"
+            className="w-full bg-foreground/5 border border-border rounded-xl pl-10 pr-4 py-3.5 text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-brand-500/50 transition-all"
           />
           {loading && (
             <div className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" />
@@ -245,7 +245,7 @@ export function PokemonSearchStep({ question, onNext, onBack }: PokemonSearchSte
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1 px-5 py-3 rounded-xl glass border border-white/10 text-foreground/60 hover:text-foreground hover:border-white/20 transition-all text-sm"
+          className="flex items-center gap-1 px-5 py-3 rounded-xl glass border border-border text-foreground/60 hover:text-foreground hover:border-foreground/20 transition-all text-sm"
         >
           <ChevronLeft className="w-4 h-4" />
           Back

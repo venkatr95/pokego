@@ -75,7 +75,7 @@ export default function LeaderboardPage() {
             <ArrowLeft className="w-4 h-4" /> Back
           </button>
           
-          <Link href="/dashboard" className="text-brand-400 hover:text-brand-300 text-sm">
+          <Link href="/dashboard" className="text-brand-600 dark:text-brand-400 hover:text-brand-500 dark:hover:text-brand-300 text-sm">
             My Dashboard
           </Link>
         </div>
@@ -123,7 +123,7 @@ export default function LeaderboardPage() {
                     player.rank === 1 ? 'bg-yellow-500/10 border-yellow-500/30' :
                     player.rank === 2 ? 'bg-gray-400/10 border-gray-400/30' :
                     player.rank === 3 ? 'bg-orange-700/10 border-orange-700/30' :
-                    'bg-foreground/5 border-white/5'
+                    'bg-foreground/5 border-border'
                   }`}
                 >
                   <div className="col-span-2 text-center font-bold text-xl">
@@ -155,16 +155,16 @@ export default function LeaderboardPage() {
                 YOU
               </div>
               <div className="grid grid-cols-12 gap-4 items-center p-4 rounded-xl border border-brand-500/50 bg-brand-500/10 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
-                <div className="col-span-2 text-center font-bold text-brand-400">
+                <div className="col-span-2 text-center font-bold text-brand-600 dark:text-brand-400">
                   {playerRank === 'Unranked' ? '-' : `#${playerRank}`}
                 </div>
                 <div className="col-span-6 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-400">
+                  <div className="w-10 h-10 rounded-full bg-brand-500/20 flex items-center justify-center text-brand-600 dark:text-brand-400">
                     <Star className="w-5 h-5" />
                   </div>
                   <div>
                     <p className="font-bold text-foreground">Guest Trainer</p>
-                    <p className="text-xs text-brand-400/70 hidden sm:block">Current Progress</p>
+                    <p className="text-xs text-brand-600/70 dark:text-brand-400/70 hidden sm:block">Current Progress</p>
                   </div>
                 </div>
                 <div className="col-span-4 text-right font-display text-lg font-bold text-yellow-400">

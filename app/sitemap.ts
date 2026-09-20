@@ -13,7 +13,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/team',
     '/achievements',
     '/story',
-    '/booster'
+    '/booster',
+    '/pokemon-go',
+    '/pokemon-go/pokedex',
+    '/pokemon-go/collection',
+    '/pokemon-go/goals',
+    '/pokemon-go/evolutions',
+    '/pokemon-go/forms',
+    '/pokemon-go/missing',
+    '/pokemon/1',
+    '/pokemon/25',
   ].map((route) => ({
     url: `${siteUrl}${route}`,
     lastModified: new Date(),

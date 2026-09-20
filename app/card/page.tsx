@@ -49,7 +49,7 @@ export default function CardRevealPage() {
 
   useEffect(() => {
     if (!generatedCard) {
-      router.replace('/quiz/name');
+      router.replace('/quiz');
       return;
     }
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -60,7 +60,7 @@ export default function CardRevealPage() {
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [generatedCard, router]);
 
-  const handleRestart = () => { resetQuiz(); router.push('/quiz/name'); };
+  const handleRestart = () => { resetQuiz(); router.push('/quiz'); };
 
   if (!generatedCard) return null;
 
@@ -338,7 +338,7 @@ export default function CardRevealPage() {
                   <div className="grid grid-cols-1 gap-3">
                     <button
                       onClick={() => setShowPrintModal(true)}
-                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl glass border border-white/10 text-foreground hover:border-yellow-500 transition-all text-sm font-bold bg-yellow-500/10"
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl glass border border-border text-foreground hover:border-yellow-500 transition-all text-sm font-bold bg-yellow-500/10"
                     >
                       <Printer className="w-4 h-4" /> Print Card
                     </button>
@@ -347,7 +347,7 @@ export default function CardRevealPage() {
                   <ShareButtons card={generatedCard} cardUrl={cardUrl} />
                   <button
                     onClick={handleRestart}
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl glass border border-white/10 text-foreground/60 hover:text-foreground hover:border-white/20 transition-all text-sm"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl glass border border-border text-foreground/60 hover:text-foreground hover:border-foreground/20 transition-all text-sm"
                   >
                     <RotateCcw className="w-4 h-4" />
                     Take Quiz Again
@@ -488,7 +488,7 @@ export default function CardRevealPage() {
               {/* Full story CTA */}
               <Link
                 href="/story"
-                className="flex items-center justify-center gap-2 py-4 rounded-2xl glass-card text-foreground/70 hover:text-foreground transition-all text-sm font-medium border border-white/10 hover:border-white/20"
+                className="flex items-center justify-center gap-2 py-4 rounded-2xl glass-card text-foreground/70 hover:text-foreground transition-all text-sm font-medium border border-border hover:border-foreground/20"
               >
                 <Map className="w-4 h-4" />
                 View Full Adventure Timeline
@@ -544,7 +544,7 @@ export default function CardRevealPage() {
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.1 * i }}
-                          className="flex items-center gap-4 p-4 rounded-xl glass hover:border-white/20 transition-all"
+                          className="flex items-center gap-4 p-4 rounded-xl glass hover:border-foreground/20 transition-all"
                           style={{ border: '1px solid rgba(255,255,255,0.06)' }}
                         >
                           <div
@@ -571,10 +571,10 @@ export default function CardRevealPage() {
                     {Array.from({ length: Math.max(0, 5 - (generatedCard.aiData.recommendedTeam?.length ?? 0)) }).map((_, i) => (
                       <div
                         key={`empty-${i}`}
-                        className="flex items-center gap-4 p-4 rounded-xl border border-dashed border-white/10"
+                        className="flex items-center gap-4 p-4 rounded-xl border border-dashed border-border"
                         style={{ opacity: 0.4 }}
                       >
-                        <div className="w-12 h-12 rounded-xl border border-white/10 flex items-center justify-center text-foreground/20">?</div>
+                        <div className="w-12 h-12 rounded-xl border border-border flex items-center justify-center text-foreground/20">?</div>
                         <p className="text-foreground/30 text-sm">Mystery slot…</p>
                       </div>
                     ))}
@@ -586,7 +586,7 @@ export default function CardRevealPage() {
 
               <Link
                 href="/team"
-                className="flex items-center justify-center gap-2 py-4 rounded-2xl glass-card text-foreground/70 hover:text-foreground transition-all text-sm font-medium border border-white/10 hover:border-white/20"
+                className="flex items-center justify-center gap-2 py-4 rounded-2xl glass-card text-foreground/70 hover:text-foreground transition-all text-sm font-medium border border-border hover:border-foreground/20"
               >
                 <Users className="w-4 h-4" />
                 Full Team Builder with Type Coverage

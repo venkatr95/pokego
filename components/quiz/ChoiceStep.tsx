@@ -64,7 +64,7 @@ export function ChoiceStep({ question, onNext, onBack }: ChoiceStepProps) {
             className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl border text-left transition-all duration-200 group ${
               selected === option.id
                 ? 'bg-brand-500/20 border-brand-500/60 shadow-[0_0_20px_rgba(91,110,247,0.25)]'
-                : 'glass border-white/10 hover:border-white/20 hover:bg-foreground/5'
+                : 'glass border-border hover:border-foreground/20 hover:bg-foreground/5'
             }`}
           >
             {/* Icon */}
@@ -84,7 +84,7 @@ export function ChoiceStep({ question, onNext, onBack }: ChoiceStepProps) {
               <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
                 selected === option.id
                   ? 'border-brand-400 bg-brand-400'
-                  : 'border-white/20'
+                  : 'border-border'
               }`}>
                 {selected === option.id && (
                   <motion.div
@@ -113,7 +113,7 @@ export function ChoiceStep({ question, onNext, onBack }: ChoiceStepProps) {
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1 px-5 py-3 rounded-xl glass border border-white/10 text-foreground/60 hover:text-foreground hover:border-white/20 transition-all text-sm"
+          className="flex items-center gap-1 px-5 py-3 rounded-xl glass border border-border text-foreground/60 hover:text-foreground hover:border-foreground/20 transition-all text-sm"
         >
           <ChevronLeft className="w-4 h-4" />
           Back
