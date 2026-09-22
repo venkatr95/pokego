@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { getStatPercent, getStatColor } from '@/lib/pokemon';
 import type { PokemonStat } from '@/types/pokemon';
+import { CARD_INK } from './card-ink';
 
 interface StatBarProps {
   stat: PokemonStat;
@@ -31,18 +32,26 @@ export function StatBar({ stat, typeTheme, compact = false, segmented = false, d
 
   return (
     <div ref={ref} className={`flex items-center gap-2 ${compact ? 'h-3.5' : 'h-5'}`}>
-      {/* Label */}
+      {/* Label — fixed card ink, not app theme */}
       <span
-        className="text-foreground/40 font-mono text-right flex-shrink-0"
-        style={{ fontSize: compact ? '8px' : '10px', width: compact ? '42px' : '55px' }}
+        className="font-mono text-right flex-shrink-0"
+        style={{
+          fontSize: compact ? '8px' : '10px',
+          width: compact ? '42px' : '55px',
+          color: CARD_INK.label,
+        }}
       >
         {STAT_LABELS[stat.name] ?? stat.name.toUpperCase()}
       </span>
 
       {/* Value */}
       <span
-        className="text-foreground/70 font-semibold text-right flex-shrink-0"
-        style={{ fontSize: compact ? '8px' : '10px', width: compact ? '22px' : '28px' }}
+        className="font-semibold text-right flex-shrink-0"
+        style={{
+          fontSize: compact ? '8px' : '10px',
+          width: compact ? '22px' : '28px',
+          color: CARD_INK.secondary,
+        }}
       >
         {stat.base_stat}
       </span>
@@ -61,7 +70,7 @@ export function StatBar({ stat, typeTheme, compact = false, segmented = false, d
                 scale: 1,
                 background: i < activeDots
                   ? `linear-gradient(90deg, ${typeTheme.primary}, ${color})`
-                  : 'rgba(255,255,255,0.1)',
+                  : CARD_INK.track,
               } : { opacity: 0, scale: 0 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
             />
@@ -80,16 +89,19 @@ export function StatBar({ stat, typeTheme, compact = false, segmented = false, d
                 opacity: 1,
                 background: i < activeSegments
                   ? `linear-gradient(90deg, ${typeTheme.primary}, ${color})`
-                  : 'rgba(255,255,255,0.1)',
+                  : CARD_INK.track,
               } : { scaleY: 0, opacity: 0 }}
               transition={{ duration: 0.2, delay: i * 0.04 }}
             />
           ))}
         </div>
       ) : (
-        <div className="stat-bar-track flex-1">
+        <div
+          className="flex-1 overflow-hidden rounded-full"
+          style={{ height: '6px', background: CARD_INK.track }}
+        >
           <motion.div
-            className="stat-bar-fill"
+            className="h-full rounded-full"
             initial={{ width: '0%' }}
             animate={isInView ? { width: `${percent}%` } : { width: '0%' }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}

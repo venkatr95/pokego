@@ -45,24 +45,62 @@ export default function CardRevealPage() {
   const [showARPreview, setShowARPreview] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('card');
+  const [hasHydrated, setHasHydrated] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // Wait for zustand persist rehydration before redirecting — otherwise a
+  // saved card briefly looks missing and users bounce to /quiz.
   useEffect(() => {
+    let cancelled = false;
+    const persistApi = useQuizStore.persist;
+    const markReady = () => {
+      if (!cancelled) setHasHydrated(true);
+    };
+    if (persistApi.hasHydrated()) markReady();
+    const unsub = persistApi.onFinishHydration(markReady);
+    const safety = setTimeout(markReady, 800);
+    return () => {
+      cancelled = true;
+      unsub();
+      clearTimeout(safety);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydrated) return;
     if (!generatedCard) {
-      router.replace('/quiz');
-      return;
+      // Give persist time to merge — hasHydrated can flip before state lands.
+      const redirectTimer = setTimeout(() => {
+        if (!useQuizStore.getState().generatedCard) {
+          router.replace('/quiz');
+        }
+      }, 400);
+      return () => clearTimeout(redirectTimer);
     }
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    const onResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', onResize);
     const t1 = setTimeout(() => setRevealed(true), 400);
     const t2 = setTimeout(() => setShowConfetti(true), 900);
     const t3 = setTimeout(() => setShowConfetti(false), 6000);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-  }, [generatedCard, router]);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [hasHydrated, generatedCard, router]);
 
   const handleRestart = () => { resetQuiz(); router.push('/quiz'); };
 
-  if (!generatedCard) return null;
+  if (!hasHydrated || !generatedCard) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background text-muted-foreground text-sm">
+        Loading your card…
+      </div>
+    );
+  }
 
   const pokemon = generatedCard.matchedPokemon;
   const typeTheme = TYPE_COLORS[pokemon.primaryType];
@@ -89,8 +127,10 @@ export default function CardRevealPage() {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-start px-4 pt-24 pb-16 relative overflow-x-hidden"
-      style={{ background: `radial-gradient(ellipse at top, ${typeTheme.bg} 0%, #0a0b0f 60%)` }}
+      className="min-h-screen flex flex-col items-center justify-start px-4 pt-24 pb-16 relative overflow-x-hidden bg-background"
+      style={{
+        backgroundImage: `radial-gradient(ellipse at top, ${typeTheme.bg} 0%, transparent 58%)`,
+      }}
     >
       {/* Confetti */}
       {showConfetti && (
@@ -124,17 +164,17 @@ export default function CardRevealPage() {
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
-                className="font-display text-3xl md:text-4xl font-bold mt-6 mb-2"
+                className="font-display text-3xl md:text-4xl font-bold mt-6 mb-2 text-foreground"
               >
                 Your Pokémon is{' '}
-                <span style={{ color: typeTheme.text }}>{pokemon.displayName}</span>!
+                <span style={{ color: typeTheme.primary }}>{pokemon.displayName}</span>!
               </motion.h1>
               {generatedCard.aiData?.motivationalQuote && (
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
-                  className="text-foreground/50 italic text-lg"
+                  className="text-muted-foreground italic text-lg px-2"
                 >
                   {generatedCard.aiData.motivationalQuote}
                 </motion.p>
@@ -150,23 +190,26 @@ export default function CardRevealPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex gap-1 glass rounded-2xl p-1 mb-8"
+              className="flex gap-1 glass rounded-2xl p-1 mb-8 max-w-full overflow-x-auto"
             >
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   id={`tab-${tab.id}`}
                   onClick={() => setActiveTab(tab.id)}
-                  className="relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all"
-                  style={{
-                    color: activeTab === tab.id ? 'white' : 'rgba(255,255,255,0.45)',
-                  }}
+                  className={`relative flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
+                    activeTab === tab.id ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                  }`}
                 >
                   {activeTab === tab.id && (
                     <motion.div
                       layoutId="active-tab"
                       className="absolute inset-0 rounded-xl"
-                      style={{ background: typeTheme.bg, border: `1px solid ${typeTheme.primary}40` }}
+                      style={{
+                        background: typeTheme.bg,
+                        border: `1px solid ${typeTheme.primary}55`,
+                        boxShadow: `0 0 16px ${typeTheme.glow}`,
+                      }}
                       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
                   )}
@@ -189,10 +232,10 @@ export default function CardRevealPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.35 }}
-              className="flex flex-col lg:flex-row gap-10 items-start justify-center w-full"
+              className="flex flex-col lg:flex-row gap-10 items-center lg:items-start justify-center w-full"
             >
               {/* Card */}
-              <div ref={cardRef}>
+              <div ref={cardRef} className="w-full flex justify-center lg:w-auto lg:justify-start overflow-x-hidden">
                 <motion.div
                   initial={{ opacity: 0, rotateY: -90, scale: 0.8 }}
                   animate={{ opacity: 1, rotateY: 0, scale: 1 }}
@@ -203,7 +246,11 @@ export default function CardRevealPage() {
                     interactive
                     themeId={selectedTheme}
                     environmentId={selectedEnvironment}
-                    scale={windowSize.width > 0 && windowSize.width < 420 ? (windowSize.width - 40) / 380 : 1}
+                    scale={
+                      windowSize.width > 0
+                        ? Math.min(1, (windowSize.width - 32) / 380)
+                        : 1
+                    }
                   />
                 </motion.div>
               </div>
@@ -220,12 +267,12 @@ export default function CardRevealPage() {
                   <h3 className="text-xs text-foreground/40 uppercase tracking-wider mb-3">Your Trainer Profile</h3>
                   <p className="font-display text-xl font-bold text-foreground">{generatedCard.trainerName}</p>
                   {generatedCard.aiData?.trainerTitle && (
-                    <p className="text-sm mt-1" style={{ color: typeTheme.text }}>
+                    <p className="text-sm mt-1 font-medium" style={{ color: typeTheme.primary }}>
                       {generatedCard.aiData.trainerTitle}
                     </p>
                   )}
                   {generatedCard.aiData?.career && (
-                    <p className="text-xs text-foreground/50 mt-1">⚔️ {generatedCard.aiData.career} · {generatedCard.aiData.region}</p>
+                    <p className="text-xs text-muted-foreground mt-1">⚔️ {generatedCard.aiData.career} · {generatedCard.aiData.region}</p>
                   )}
                   {/* Scores row */}
                   <div className="grid grid-cols-3 gap-2 mt-4">
@@ -234,10 +281,14 @@ export default function CardRevealPage() {
                       { label: 'XP Level', value: generatedCard.xpLevel, icon: '📈' },
                       { label: 'Friendship', value: generatedCard.friendshipLevel, icon: '💖' },
                     ].map(({ label, value, icon }) => (
-                      <div key={label} className="text-center p-2 rounded-xl" style={{ background: typeTheme.bg }}>
+                      <div
+                        key={label}
+                        className="text-center p-2 rounded-xl border border-border/60"
+                        style={{ background: typeTheme.bg }}
+                      >
                         <div className="text-lg">{icon}</div>
                         <div className="text-foreground font-bold text-sm">{value}</div>
-                        <div className="text-foreground/40 text-[10px]">{label}</div>
+                        <div className="text-muted-foreground text-[10px]">{label}</div>
                       </div>
                     ))}
                   </div>
@@ -299,7 +350,7 @@ export default function CardRevealPage() {
                         <span
                           key={s}
                           className="text-xs px-3 py-1.5 rounded-full font-medium"
-                          style={{ background: typeTheme.bg, color: typeTheme.text, border: `1px solid ${typeTheme.primary}40` }}
+                          style={{ background: typeTheme.bg, color: typeTheme.primary, border: `1px solid ${typeTheme.primary}40` }}
                         >
                           ✨ {s}
                         </span>
@@ -323,8 +374,7 @@ export default function CardRevealPage() {
                       <Link
                         key={href}
                         href={href}
-                        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-foreground/60 hover:text-foreground transition-all group"
-                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+                        className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm text-muted-foreground hover:text-foreground transition-all group bg-muted/40 border border-border hover:border-foreground/20"
                       >
                         <span className="text-base group-hover:scale-110 transition-transform">{icon}</span>
                         <span className="font-medium">{label}</span>
@@ -391,7 +441,7 @@ export default function CardRevealPage() {
                       <h3 className="text-xs text-foreground/40 uppercase tracking-wider mb-2">Battle Style</h3>
                       <span
                         className="text-sm px-3 py-1 rounded-full font-medium"
-                        style={{ background: typeTheme.bg, color: typeTheme.text, border: `1px solid ${typeTheme.primary}40` }}
+                        style={{ background: typeTheme.bg, color: typeTheme.primary, border: `1px solid ${typeTheme.primary}40` }}
                       >
                         ⚔️ {generatedCard.aiData.battleStyle}
                       </span>
@@ -544,22 +594,18 @@ export default function CardRevealPage() {
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.1 * i }}
-                          className="flex items-center gap-4 p-4 rounded-xl glass hover:border-foreground/20 transition-all"
-                          style={{ border: '1px solid rgba(255,255,255,0.06)' }}
+                          className="flex items-center gap-4 p-4 rounded-xl glass border border-border hover:border-foreground/20 transition-all"
                         >
-                          <div
-                            className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-                            style={{ background: 'rgba(255,255,255,0.05)' }}
-                          >
+                          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 bg-muted/50 border border-border">
                             🔵
                           </div>
-                          <div className="flex-1">
+                          <div className="flex-1 min-w-0">
                             <p className="font-semibold text-foreground">{member.name}</p>
-                            <p className="text-sm text-foreground/55 mt-0.5">{member.reason}</p>
+                            <p className="text-sm text-muted-foreground mt-0.5">{member.reason}</p>
                           </div>
                           <div
-                            className="text-xs px-2 py-1 rounded-full"
-                            style={{ background: typeTheme.bg, color: typeTheme.text }}
+                            className="text-xs px-2 py-1 rounded-full flex-shrink-0"
+                            style={{ background: typeTheme.bg, color: typeTheme.primary }}
                           >
                             #{i + 2}/6
                           </div>
@@ -604,11 +650,11 @@ export default function CardRevealPage() {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 px-4"
             >
-              <div className="w-full max-w-lg bg-[#111] p-6 rounded-3xl border border-white/10 relative">
-                <button onClick={() => setShowARPreview(false)} className="absolute top-4 right-4 text-foreground/50 hover:text-foreground">✕</button>
+              <div className="w-full max-w-lg dialog-surface p-6 rounded-3xl relative">
+                <button onClick={() => setShowARPreview(false)} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">✕</button>
                 <h3 className="font-bold text-xl mb-4 text-foreground">AR Card Preview</h3>
                 <ARCardPreview pokemonName={pokemon.displayName} />
-                <p className="text-xs text-foreground/40 text-center mt-4">Point your camera at a flat surface and tap &quot;Enter AR&quot;.</p>
+                <p className="text-xs text-muted-foreground text-center mt-4">Point your camera at a flat surface and tap &quot;Enter AR&quot;.</p>
               </div>
             </motion.div>
           )}
@@ -620,14 +666,14 @@ export default function CardRevealPage() {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 px-4"
             >
-              <div className="w-full max-w-md bg-[#111] p-6 rounded-3xl border border-white/10 relative text-center">
-                <button onClick={() => setShowPrintModal(false)} className="absolute top-4 right-4 text-foreground/50 hover:text-foreground">✕</button>
+              <div className="w-full max-w-md dialog-surface p-6 rounded-3xl relative text-center">
+                <button onClick={() => setShowPrintModal(false)} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">✕</button>
                 <h3 className="font-display font-bold text-2xl mb-2 text-foreground">Print Physical Card</h3>
-                <p className="text-foreground/60 mb-6 text-sm">Get a real, holographic printed version of your unique Pokémon personality card delivered to your door.</p>
+                <p className="text-muted-foreground mb-6 text-sm">Get a real, holographic printed version of your unique Pokémon personality card delivered to your door.</p>
                 
                 <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-xl mb-6 text-left">
-                  <p className="text-yellow-400 font-bold mb-1">Premium Feature</p>
-                  <p className="text-foreground/50 text-xs">This feature connects to Printful/Prodigi API. Mock checkout flow activated.</p>
+                  <p className="text-yellow-600 dark:text-yellow-400 font-bold mb-1">Premium Feature</p>
+                  <p className="text-muted-foreground text-xs">This feature connects to Printful/Prodigi API. Mock checkout flow activated.</p>
                 </div>
 
                 <button 
@@ -635,7 +681,7 @@ export default function CardRevealPage() {
                     alert("Connecting to Print-on-Demand Provider checkout...");
                     setShowPrintModal(false);
                   }}
-                  className="w-full py-4 bg-foreground text-background font-bold rounded-xl hover:bg-gray-200 transition-colors"
+                  className="w-full py-4 bg-foreground text-background font-bold rounded-xl hover:opacity-90 transition-opacity"
                 >
                   Checkout ($9.99)
                 </button>

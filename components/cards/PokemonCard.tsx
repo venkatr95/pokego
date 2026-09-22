@@ -14,6 +14,7 @@ import { useQuizStore } from '@/store/quiz-store';
 import { CARD_THEMES, type CardThemeId } from './themes';
 import { ENVIRONMENT_BACKGROUNDS, getEnvironmentForType, type EnvironmentTheme } from './themes/backgrounds';
 import { ExFullArtLayout } from './layouts/ExFullArtLayout';
+import { CARD_INK } from './card-ink';
 
 interface PokemonCardProps {
   card: GeneratedCard;
@@ -67,7 +68,8 @@ export function PokemonCard({
   environmentId = null,
 }: PokemonCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [isFlipped, setIsFlipped] = useState(interactive ?? false);
+  // Always start on the front face; click toggles to the back.
+  const [isFlipped, setIsFlipped] = useState(false);
   const [isZoomed, setIsZoomed] = useState(false);
   const [motionPictureUrl, setMotionPictureUrl] = useState<string | null>(null);
   const [glarePos, setGlarePos] = useState({ x: 50, y: 50 });
@@ -86,6 +88,10 @@ export function PokemonCard({
   const theme = CARD_THEMES[themeId];
   const envId = environmentId ?? getEnvironmentForType(primaryType);
   const environment = ENVIRONMENT_BACKGROUNDS[envId];
+  const designW = theme.widthRatio;
+  const designH = theme.heightRatio;
+  // Keep full design size while exporting so downloads stay high-res.
+  const visualScale = isExporting ? 1 : scale;
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!interactive || !cardRef.current) return;
@@ -174,18 +180,38 @@ export function PokemonCard({
       : { primary: typeTheme.primary, secondary: typeTheme.secondary };
 
   return (
+    // Layout box at the scaled size. CSS scale (not framer) keeps text proportions
+    // correct on mobile without fighting rotateX/rotateY motion values.
+    <div
+      className="relative max-w-full"
+      style={{
+        width: `${designW * visualScale}px`,
+        height: `${designH * visualScale}px`,
+      }}
+    >
+    <div
+      className="absolute top-0 left-0"
+      style={{
+        width: `${designW}px`,
+        height: `${designH}px`,
+        transform: `scale(${visualScale})`,
+        transformOrigin: 'top left',
+      }}
+    >
     <motion.div
       ref={cardRef}
       id="pokemon-card"
       className={`card-wrapper relative ${theme.wrapperClass}`}
       style={{
-        width: `${theme.widthRatio * scale}px`,
-        height: `${theme.heightRatio * scale}px`,
+        width: `${designW}px`,
+        height: `${designH}px`,
         transformStyle: 'preserve-3d',
         perspective: '1200px',
         rotateX: interactive && !isExporting ? rotateX : 0,
         rotateY: interactive && !isExporting ? rotateY : 0,
         fontFamily,
+        // Card face ink is fixed — never inherit app light/dark tokens.
+        color: isRetro ? '#0f380f' : CARD_INK.primary,
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -318,41 +344,50 @@ export function PokemonCard({
 
               {/* ── Card content ────────────────────────────────────── */}
               <div
-                className="relative z-10 h-full flex flex-col p-4"
-                style={{ fontSize: `${scale}rem`, color: isRetro ? '#0f380f' : 'inherit' }}
+                className="relative z-10 h-full flex flex-col p-4 min-h-0 overflow-hidden"
+                style={{ color: isRetro ? '#0f380f' : CARD_INK.primary }}
               >
                 {/* Header row */}
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <p className={`text-[10px] leading-none font-mono ${isRetro ? 'text-[#0f380f]/70' : 'text-foreground/40'}`}>
+                <div className="flex items-start justify-between mb-2 gap-2">
+                  <div className="min-w-0">
+                    <p
+                      className="text-[10px] leading-none font-mono truncate"
+                      style={{ color: isRetro ? 'rgba(15,56,15,0.7)' : CARD_INK.label }}
+                    >
                       {card.cardNumber}
                     </p>
-                    <p className={`text-xs font-bold mt-0.5 leading-tight ${isRetro ? 'text-[#0f380f]' : 'text-foreground/80'}`}>
+                    <p
+                      className="text-xs font-bold mt-0.5 leading-tight truncate"
+                      style={{ color: isRetro ? '#0f380f' : CARD_INK.secondary }}
+                    >
                       {card.trainerName}
                     </p>
                     {card.aiData?.trainerTitle && (
                       <p
-                        className="text-[10px] leading-tight mt-0.5"
+                        className="text-[10px] leading-tight mt-0.5 truncate"
                         style={{ color: isRetro ? '#0f380f' : isGold ? '#d4af37' : typeTheme.text }}
                       >
                         {card.aiData.trainerTitle}
                       </p>
                     )}
                   </div>
-                  <div className="text-right">
+                  <div className="text-right flex-shrink-0">
                     <RarityBadge rarity={card.rarity} small />
-                    <p className={`text-[10px] mt-1 font-mono ${isRetro ? 'text-[#0f380f]/60' : 'text-foreground/40'}`}>
+                    <p
+                      className="text-[10px] mt-1 font-mono"
+                      style={{ color: isRetro ? 'rgba(15,56,15,0.6)' : CARD_INK.label }}
+                    >
                       {formatDexNumber(pokemon.id)}
                     </p>
                   </div>
                 </div>
 
                 {/* Pokémon name + types */}
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-2 gap-2">
                   <h2
-                    className="font-display font-bold leading-none"
+                    className="font-display font-bold leading-none truncate min-w-0"
                     style={{
-                      fontSize: isPixel ? '0.7rem' : isVMAX(themeId) ? '1.4rem' : '1.2rem',
+                      fontSize: isPixel ? '0.7rem' : isVMAX(themeId) ? '1.35rem' : '1.15rem',
                       color: isRetro ? '#0f380f' : isGold ? '#d4af37' : typeTheme.text,
                       textShadow: theme.textGlow && !isRetro
                         ? `0 0 20px ${typeTheme.glow}, 0 0 40px ${typeTheme.glow}`
@@ -365,7 +400,7 @@ export function PokemonCard({
                     {themeId === 'vstar' && <span className="text-[0.5em] ml-1 opacity-80">VSTAR</span>}
                     {themeId === 'v' && <span className="text-[0.5em] ml-1 opacity-80">V</span>}
                   </h2>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 flex-shrink-0">
                     {pokemon.types.map((t) => (
                       <TypeBadge key={t} type={t} small />
                     ))}
@@ -401,7 +436,7 @@ export function PokemonCard({
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={`/_next/image?url=${encodeURIComponent(buddyArtUrl)}&w=128&q=75`} alt={card.buddy.displayName} className="w-10 h-10 object-contain" />
                       </div>
-                      <p className="text-[8px] text-foreground/50 text-center mt-0.5">Buddy</p>
+                      <p className="text-[8px] text-center mt-0.5" style={{ color: CARD_INK.muted }}>Buddy</p>
                     </div>
                   )}
 
@@ -430,8 +465,18 @@ export function PokemonCard({
                     }}
                   >
                     <div style={{ transform: theme.badgeShape === 'diamond' ? 'rotate(-45deg)' : 'none' }}>
-                      <p className={`text-[7px] leading-none ${isRetro ? 'text-[#9bbc0f]' : 'text-foreground/80'}`}>LV</p>
-                      <p className={`text-[11px] font-bold leading-none ${isRetro ? 'text-[#9bbc0f]' : 'text-foreground'}`}>{card.xpLevel}</p>
+                      <p
+                        className="text-[7px] leading-none"
+                        style={{ color: isRetro ? '#9bbc0f' : CARD_INK.secondary }}
+                      >
+                        LV
+                      </p>
+                      <p
+                        className="text-[11px] font-bold leading-none"
+                        style={{ color: isRetro ? '#9bbc0f' : CARD_INK.primary }}
+                      >
+                        {card.xpLevel}
+                      </p>
                     </div>
                   </div>
 
@@ -459,9 +504,9 @@ export function PokemonCard({
 
                 {/* Info row */}
                 <div
-                  className="rounded-xl p-2.5 mb-2 grid grid-cols-3 gap-1 text-center"
+                  className="rounded-xl p-2.5 mb-2 grid grid-cols-3 gap-1 text-center flex-shrink-0"
                   style={{
-                    background: isRetro ? 'rgba(15,56,15,0.2)' : 'rgba(0,0,0,0.3)',
+                    background: isRetro ? 'rgba(15,56,15,0.2)' : CARD_INK.panel,
                     border: isRetro ? '1px solid #0f380f30' : `1px solid ${typeTheme.primary}20`,
                     borderRadius: isPixel || isRetro ? '4px' : undefined,
                   }}
@@ -471,9 +516,19 @@ export function PokemonCard({
                     { label: 'Weight', value: `${(pokemon.weight / 10).toFixed(1)}kg` },
                     { label: 'Friendship', value: card.friendshipLevel },
                   ].map(({ label, value }) => (
-                    <div key={label}>
-                      <p className={`text-[9px] leading-none ${isRetro ? 'text-[#0f380f]/60' : 'text-foreground/40'}`}>{label}</p>
-                      <p className={`text-[10px] font-semibold mt-0.5 ${isRetro ? 'text-[#0f380f]' : 'text-foreground/80'}`}>{value}</p>
+                    <div key={label} className="min-w-0">
+                      <p
+                        className="text-[9px] leading-none truncate"
+                        style={{ color: isRetro ? 'rgba(15,56,15,0.6)' : CARD_INK.label }}
+                      >
+                        {label}
+                      </p>
+                      <p
+                        className="text-[10px] font-semibold mt-0.5 truncate"
+                        style={{ color: isRetro ? '#0f380f' : CARD_INK.secondary }}
+                      >
+                        {value}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -481,15 +536,23 @@ export function PokemonCard({
                 {/* Personality summary */}
                 {card.aiData?.personalitySummary && (
                   <div
-                    className="rounded-xl p-2.5 mb-2 flex-1 overflow-hidden"
+                    className="rounded-xl p-2.5 mb-2 flex-1 min-h-0 overflow-hidden"
                     style={{
-                      background: isRetro ? 'rgba(15,56,15,0.15)' : 'rgba(0,0,0,0.25)',
+                      background: isRetro ? 'rgba(15,56,15,0.15)' : CARD_INK.panelSoft,
                       border: isRetro ? '1px solid #0f380f25' : `1px solid ${typeTheme.primary}15`,
                       borderRadius: isPixel || isRetro ? '4px' : undefined,
                     }}
                   >
-                    <p className={`text-[9px] mb-1 uppercase tracking-wider ${isRetro ? 'text-[#0f380f]/50' : 'text-foreground/40'}`}>Personality</p>
-                    <p className={`text-[9px] leading-relaxed line-clamp-4 ${isRetro ? 'text-[#0f380f]/80' : 'text-foreground/70'}`}>
+                    <p
+                      className="text-[9px] mb-1 uppercase tracking-wider"
+                      style={{ color: isRetro ? 'rgba(15,56,15,0.5)' : CARD_INK.label }}
+                    >
+                      Personality
+                    </p>
+                    <p
+                      className="text-[9px] leading-relaxed line-clamp-4"
+                      style={{ color: isRetro ? 'rgba(15,56,15,0.8)' : CARD_INK.body }}
+                    >
                       {card.aiData.personalitySummary}
                     </p>
                   </div>
@@ -498,24 +561,33 @@ export function PokemonCard({
                 {/* Signature Move */}
                 {card.signatureMove && (
                   <div
-                    className="rounded-xl px-3 py-2 mb-2"
+                    className="rounded-xl px-3 py-2 mb-2 flex-shrink-0"
                     style={{
                       background: isRetro ? 'rgba(15,56,15,0.3)' : `${typeTheme.bg}`,
                       border: isRetro ? '1px solid #0f380f40' : `1px solid ${typeTheme.primary}30`,
                       borderRadius: isPixel || isRetro ? '4px' : undefined,
                     }}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className={`text-[9px] uppercase tracking-wider ${isRetro ? 'text-[#0f380f]/50' : 'text-foreground/50'}`}>
+                    <div className="flex items-center justify-between gap-2">
+                      <span
+                        className="text-[9px] uppercase tracking-wider"
+                        style={{ color: isRetro ? 'rgba(15,56,15,0.5)' : CARD_INK.muted }}
+                      >
                         Signature Move
                       </span>
                       <TypeBadge type={card.signatureMove.type as Parameters<typeof TypeBadge>[0]['type']} tiny />
                     </div>
-                    <div className="flex items-center justify-between mt-1">
-                      <p className={`text-[11px] font-bold ${isRetro ? 'text-[#0f380f]' : 'text-foreground'}`}>
+                    <div className="flex items-center justify-between mt-1 gap-2 min-w-0">
+                      <p
+                        className="text-[11px] font-bold truncate"
+                        style={{ color: isRetro ? '#0f380f' : CARD_INK.primary }}
+                      >
                         {card.signatureMove.name}
                       </p>
-                      <div className={`flex gap-2 text-[9px] ${isRetro ? 'text-[#0f380f]/60' : 'text-foreground/50'}`}>
+                      <div
+                        className="flex gap-2 text-[9px] flex-shrink-0"
+                        style={{ color: isRetro ? 'rgba(15,56,15,0.6)' : CARD_INK.muted }}
+                      >
                         {card.signatureMove.power && <span>PWR {card.signatureMove.power}</span>}
                         {card.signatureMove.accuracy && <span>ACC {card.signatureMove.accuracy}</span>}
                       </div>
@@ -524,10 +596,26 @@ export function PokemonCard({
                 )}
 
                 {/* Footer */}
-                <div className={`flex items-center justify-between mt-auto pt-1.5 border-t ${isRetro ? 'border-[#0f380f]/20' : 'border-white/5'}`}>
-                  <p className={`text-[8px] ${isRetro ? 'text-[#0f380f]/50' : 'text-foreground/30'}`}>{trainerRank}</p>
-                  <p className={`text-[8px] font-mono ${isRetro ? 'text-[#0f380f]/50' : 'text-foreground/30'}`}>#{card.id.slice(0, 8)}</p>
-                  <p className={`text-[8px] ${isRetro ? 'text-[#0f380f]/50' : 'text-foreground/30'}`}>
+                <div
+                  className="flex items-center justify-between mt-auto pt-1.5 gap-2 flex-shrink-0"
+                  style={{ borderTop: `1px solid ${isRetro ? 'rgba(15,56,15,0.2)' : CARD_INK.border}` }}
+                >
+                  <p
+                    className="text-[8px] truncate"
+                    style={{ color: isRetro ? 'rgba(15,56,15,0.5)' : CARD_INK.faint }}
+                  >
+                    {trainerRank}
+                  </p>
+                  <p
+                    className="text-[8px] font-mono flex-shrink-0"
+                    style={{ color: isRetro ? 'rgba(15,56,15,0.5)' : CARD_INK.faint }}
+                  >
+                    #{card.id.slice(0, 8)}
+                  </p>
+                  <p
+                    className="text-[8px] flex-shrink-0"
+                    style={{ color: isRetro ? 'rgba(15,56,15,0.5)' : CARD_INK.faint }}
+                  >
                     {new Date(card.generatedAt).toLocaleDateString()}
                   </p>
                 </div>
@@ -584,7 +672,7 @@ export function PokemonCard({
                   animate={{ x: 0, skewX: -10 }}
                   className="absolute z-30 bottom-[20%] w-[120%] bg-red-600/90 py-3 border-y-4 border-white shadow-[0_0_30px_red] flex items-center justify-center backdrop-blur-sm"
                 >
-                  <h2 className="text-white font-black italic uppercase tracking-tighter" style={{ fontSize: `${(scale || 1) * 2.2}rem`, textShadow: '3px 3px 0 black' }}>
+                  <h2 className="text-white font-black italic uppercase tracking-tighter" style={{ fontSize: '2.2rem', textShadow: '3px 3px 0 black' }}>
                     {card.signatureMove?.name || (card.aiData?.battleStyle ? `${card.aiData.battleStyle.split(' ')[0]} Strike` : 'Hyper Beam')}
                   </h2>
                 </motion.div>
@@ -597,6 +685,8 @@ export function PokemonCard({
         </div>
       </motion.div>
     </motion.div>
+    </div>
+    </div>
   );
 }
 
